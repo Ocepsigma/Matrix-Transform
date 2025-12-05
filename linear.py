@@ -1,43 +1,185 @@
 #!/usr/bin/env python3
 """
-🔄 Matrix Transformation Studio - Simple Version
-Image Processing dengan Matrix Transformations
+🔄 Matrix Transformation Studio - Professional Version
+Image Processing dengan Matrix Transformations menggunakan Python dan Streamlit
+Design sama seperti versi web Next.js yang pertama
 """
 
-try:
-    import streamlit as st
-    import numpy as np
-    from PIL import Image, ImageDraw, ImageFont
-    import matplotlib.pyplot as plt
-    import io
-    import base64
-    import sys
-    import os
-    import argparse
-    from typing import Dict, Any
-    
-    # Fallback untuk OpenCV
-    try:
-        import cv2
-        OPENCV_AVAILABLE = True
-    except ImportError:
-        OPENCV_AVAILABLE = False
-        print("⚠️ OpenCV not available, using PIL fallback")
-    
-except ImportError as e:
-    print(f"❌ Import Error: {e}")
-    print("🔧 Please install: pip install streamlit numpy matplotlib pillow")
-    sys.exit(1)
+import streamlit as st
+import numpy as np
+from PIL import Image, ImageDraw, ImageFont
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+import io
+import base64
+import sys
+import os
+from typing import Dict, Any, Tuple
+import colorsys
 
-class SimpleMatrixTransformer:
-    """Simplified version without OpenCV dependency"""
+# Set page config
+st.set_page_config(
+    page_title="Matrix Transformation Studio",
+    page_icon="🔄",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+# Custom CSS untuk styling
+st.markdown("""
+<style>
+    /* Main container styling */
+    .main-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 2rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+        text-align: center;
+        color: white;
+    }
+    
+    /* Card styling */
+    .card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 1rem;
+        border: 1px solid #e2e8f0;
+    }
+    
+    .matrix-card {
+        background: #f8fafc;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin: 1rem 0;
+    }
+    
+    /* Matrix display */
+    .matrix-display {
+        font-family: 'Courier New', monospace;
+        font-size: 1.1rem;
+        background: #1e293b;
+        color: #10b981;
+        padding: 1rem;
+        border-radius: 8px;
+        margin: 1rem 0;
+        white-space: pre;
+    }
+    
+    /* Button styling */
+    .stButton > button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .stButton > button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+    
+    /* Slider styling */
+    .stSlider > div > div > div {
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    /* Sidebar styling */
+    .css-1d391kg {
+        background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+    }
+    
+    /* Tab styling */
+    .stTabs [data-baseweb="tab-list"] {
+        background: #f1f5f9;
+        border-radius: 8px;
+        padding: 0.5rem;
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        background: white;
+        border-radius: 6px;
+        margin: 0 0.25rem;
+        font-weight: 600;
+    }
+    
+    /* Success message */
+    .success-message {
+        background: #10b981;
+        color: white;
+        padding: 1rem;
+        border-radius: 8px;
+        margin: 1rem 0;
+        text-align: center;
+        font-weight: 600;
+    }
+    
+    /* Info message */
+    .info-message {
+        background: #3b82f6;
+        color: white;
+        padding: 1rem;
+        border-radius: 8px;
+        margin: 1rem 0;
+        text-align: center;
+    }
+    
+    /* Preset button styling */
+    .preset-button {
+        background: white;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 0.5rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .preset-button:hover {
+        border-color: #667eea;
+        background: #f0f4ff;
+    }
+    
+    /* Image container */
+    .image-container {
+        position: relative;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        overflow: hidden;
+        background: white;
+    }
+    
+    .image-label {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        z-index: 10;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+class ProfessionalMatrixTransformer:
+    """Professional Matrix Transformation Engine"""
     
     def __init__(self):
         self.image = None
         self.transformed_image = None
+        self.original_shape = None
     
     def load_image(self, image_source) -> bool:
-        """Load image using PIL"""
+        """Load image from various sources"""
         try:
             if hasattr(image_source, 'read'):  # UploadedFile
                 self.image = Image.open(image_source).convert('RGB')
@@ -45,16 +187,22 @@ class SimpleMatrixTransformer:
                 self.image = Image.open(image_source).convert('RGB')
             elif isinstance(image_source, Image.Image):  # PIL Image
                 self.image = image_source.convert('RGB')
+            elif isinstance(image_source, np.ndarray):  # Numpy array
+                self.image = Image.fromarray(image_source.astype(np.uint8))
             else:
                 raise ValueError("Unsupported image source type")
             
+            # Store original shape
+            self.original_shape = self.image.size
             return True
+            
         except Exception as e:
-            st.error(f"Error loading image: {str(e)}")
+            st.error(f"❌ Error loading image: {str(e)}")
             return False
     
     def create_transformation_matrix(self, params: Dict[str, Any]) -> np.ndarray:
         """Create 3x3 transformation matrix"""
+        # Extract parameters
         tx = params.get('translation_x', 0)
         ty = params.get('translation_y', 0)
         sx = params.get('scaling_x', 1)
@@ -70,42 +218,48 @@ class SimpleMatrixTransformer:
         cos_a = np.cos(angle_rad)
         sin_a = np.sin(angle_rad)
         
-        # Build transformation matrix
+        # Build transformation matrix step by step
         matrix = np.eye(3)
         
-        # Reflection
+        # 1. Reflection
         if reflect_h:
-            matrix = np.array([[-1, 0, 0], [0, 1, 0], [0, 0, 1]]) @ matrix
+            reflect_matrix = np.array([[-1, 0, 0], [0, 1, 0], [0, 0, 1]])
+            matrix = reflect_matrix @ matrix
+        
         if reflect_v:
-            matrix = np.array([[1, 0, 0], [0, -1, 0], [0, 0, 1]]) @ matrix
+            reflect_matrix = np.array([[1, 0, 0], [0, -1, 0], [0, 0, 1]])
+            matrix = reflect_matrix @ matrix
         
-        # Scaling
-        matrix = np.array([[sx, 0, 0], [0, sy, 0], [0, 0, 1]]) @ matrix
+        # 2. Scaling
+        scale_matrix = np.array([[sx, 0, 0], [0, sy, 0], [0, 0, 1]])
+        matrix = scale_matrix @ matrix
         
-        # Rotation
-        matrix = np.array([[cos_a, -sin_a, 0], [sin_a, cos_a, 0], [0, 0, 1]]) @ matrix
+        # 3. Rotation
+        rotation_matrix = np.array([[cos_a, -sin_a, 0], [sin_a, cos_a, 0], [0, 0, 1]])
+        matrix = rotation_matrix @ matrix
         
-        # Shearing
-        matrix = np.array([[1, shear_x, 0], [shear_y, 1, 0], [0, 0, 1]]) @ matrix
+        # 4. Shearing
+        shear_matrix = np.array([[1, shear_x, 0], [shear_y, 1, 0], [0, 0, 1]])
+        matrix = shear_matrix @ matrix
         
-        # Translation
-        matrix = np.array([[1, 0, tx], [0, 1, ty], [0, 0, 1]]) @ matrix
+        # 5. Translation
+        translation_matrix = np.array([[1, 0, tx], [0, 1, ty], [0, 0, 1]])
+        matrix = translation_matrix @ matrix
         
         return matrix
     
-    def apply_transformation_pil(self, matrix: np.ndarray) -> Image.Image:
-        """Apply transformation using PIL"""
+    def apply_transformation(self, matrix: np.ndarray) -> Image.Image:
+        """Apply transformation to image using PIL"""
         if self.image is None:
             raise ValueError("No image loaded")
         
-        # Get image size
         width, height = self.image.size
         
         # Create a larger canvas
-        canvas_size = max(width, height) * 3
+        canvas_size = max(width, height) * 4
         canvas = Image.new('RGB', (canvas_size, canvas_size), 'white')
         
-        # Calculate center offset
+        # Calculate center position
         center_x = canvas_size // 2
         center_y = canvas_size // 2
         
@@ -117,7 +271,7 @@ class SimpleMatrixTransformer:
         # Apply transformations step by step
         transformed = canvas
         
-        # Extract parameters from matrix
+        # Extract transformation parameters
         tx = matrix[0, 2]
         ty = matrix[1, 2]
         
@@ -143,6 +297,13 @@ class SimpleMatrixTransformer:
             new_height = int(transformed.height * scale_y)
             transformed = transformed.resize((new_width, new_height), Image.Resampling.LANCZOS)
         
+        # Apply reflection
+        if matrix[0, 0] < 0:  # Horizontal reflection
+            transformed = transformed.transpose(Image.FLIP_LEFT_RIGHT)
+        
+        if matrix[1, 1] < 0:  # Vertical reflection
+            transformed = transformed.transpose(Image.FLIP_TOP_BOTTOM)
+        
         # Crop to content
         bbox = transformed.getbbox()
         if bbox:
@@ -150,49 +311,6 @@ class SimpleMatrixTransformer:
         
         self.transformed_image = transformed
         return transformed
-    
-    def apply_transformation(self, matrix: np.ndarray) -> Image.Image:
-        """Apply transformation using available backend"""
-        if OPENCV_AVAILABLE:
-            return self.apply_transformation_opencv(matrix)
-        else:
-            return self.apply_transformation_pil(matrix)
-    
-    def apply_transformation_opencv(self, matrix: np.ndarray) -> Image.Image:
-        """Apply transformation using OpenCV (if available)"""
-        # Convert PIL to OpenCV format
-        img_array = np.array(self.image)
-        
-        height, width = img_array.shape[:2]
-        
-        # Get corners
-        corners = np.array([[0, 0, 1], [width, 0, 1], [width, height, 1], [0, height, 1]]).T
-        
-        # Transform corners
-        transformed_corners = matrix @ corners
-        transformed_corners = transformed_corners[:2] / transformed_corners[2]
-        
-        # Calculate new bounds
-        min_x, min_y = np.min(transformed_corners, axis=1)
-        max_x, max_y = np.max(transformed_corners, axis=1)
-        
-        # New canvas size
-        padding = 50
-        new_width = int(max_x - min_x + 2 * padding)
-        new_height = int(max_y - min_y + 2 * padding)
-        
-        # Apply transformation
-        cv_matrix = matrix[:2, :]
-        cv_matrix[0, 2] -= min_x - padding
-        cv_matrix[1, 2] -= min_y - padding
-        
-        transformed = cv2.warpAffine(img_array, cv_matrix, (new_width, new_height),
-                                   flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT,
-                                   borderValue=(255, 255, 255))
-        
-        # Convert back to PIL
-        self.transformed_image = Image.fromarray(transformed)
-        return self.transformed_image
     
     def get_preset_transformations(self) -> Dict[str, Dict[str, Any]]:
         """Get preset transformations"""
@@ -211,10 +329,17 @@ class SimpleMatrixTransformer:
                 'shearing_x': 0, 'shearing_y': 0,
                 'reflection_horizontal': False, 'reflection_vertical': True
             },
-            "Rotasi 90°": {
+            "Rotate 90°": {
                 'translation_x': 0, 'translation_y': 0,
                 'scaling_x': 1, 'scaling_y': 1,
                 'rotation': 90,
+                'shearing_x': 0, 'shearing_y': 0,
+                'reflection_horizontal': False, 'reflection_vertical': False
+            },
+            "Rotate 180°": {
+                'translation_x': 0, 'translation_y': 0,
+                'scaling_x': 1, 'scaling_y': 1,
+                'rotation': 180,
                 'shearing_x': 0, 'shearing_y': 0,
                 'reflection_horizontal': False, 'reflection_vertical': False
             },
@@ -224,181 +349,364 @@ class SimpleMatrixTransformer:
                 'rotation': 0,
                 'shearing_x': 0, 'shearing_y': 0,
                 'reflection_horizontal': False, 'reflection_vertical': False
+            },
+            "Scale 0.5x": {
+                'translation_x': 0, 'translation_y': 0,
+                'scaling_x': 0.5, 'scaling_y': 0.5,
+                'rotation': 0,
+                'shearing_x': 0, 'shearing_y': 0,
+                'reflection_horizontal': False, 'reflection_vertical': False
+            },
+            "Skew Right": {
+                'translation_x': 0, 'translation_y': 0,
+                'scaling_x': 1, 'scaling_y': 1,
+                'rotation': 0,
+                'shearing_x': 0.3, 'shearing_y': 0,
+                'reflection_horizontal': False, 'reflection_vertical': False
+            },
+            "Skew Up": {
+                'translation_x': 0, 'translation_y': 0,
+                'scaling_x': 1, 'scaling_y': 1,
+                'rotation': 0,
+                'shearing_x': 0, 'shearing_y': -0.3,
+                'reflection_horizontal': False, 'reflection_vertical': False
             }
         }
 
 def create_sample_image():
-    """Create sample image for demo"""
-    img = Image.new('RGB', (400, 300), 'white')
+    """Create professional sample image"""
+    # Create gradient background
+    width, height = 400, 300
+    img = Image.new('RGB', (width, height), 'white')
     draw = ImageDraw.Draw(img)
     
-    # Draw shapes
-    draw.rectangle([50, 50, 150, 150], fill='red')
-    draw.ellipse([250, 100, 350, 200], fill='green')
-    draw.line([(0, 0), (400, 300)], fill='blue', width=3)
+    # Create gradient
+    for y in range(height):
+        color_value = int(255 * (1 - y / height))
+        color = (color_value, 100, 255 - color_value)
+        draw.line([(0, y), (width, y)], fill=color)
+    
+    # Add geometric shapes
+    # Rectangle
+    draw.rectangle([50, 50, 150, 150], fill='red', outline='darkred', width=3)
+    
+    # Circle
+    draw.ellipse([250, 100, 350, 200], fill='green', outline='darkgreen', width=3)
+    
+    # Triangle
+    draw.polygon([(200, 250), (250, 150), (300, 250)], fill='blue', outline='darkblue', width=3)
     
     # Add text
     try:
+        # Try to use a nice font
         font = ImageFont.truetype("arial.ttf", 24)
     except:
         font = ImageFont.load_default()
     
-    draw.text((150, 250), "DEMO", fill='black', font=font, anchor='mm')
+    draw.text((width//2, height//2), "MATRIX", fill='white', font=font, anchor='mm')
+    draw.text((width//2, height//2 + 30), "STUDIO", fill='white', font=font, anchor='mm')
     
     return img
 
-def display_matrix(matrix: np.ndarray, title: str = "Matriks Transformasi"):
-    """Display transformation matrix"""
-    st.subheader(title)
+def display_professional_matrix(matrix: np.ndarray, title: str = "Transformation Matrix"):
+    """Display matrix with professional styling"""
+    st.markdown(f"""
+    <div class="matrix-card">
+        <h3 style="margin: 0 0 1rem 0; color: #1e293b;">{title}</h3>
+        <div class="matrix-display">
+[ {matrix[0,0]:7.3f}  {matrix[0,1]:7.3f}  {matrix[0,2]:7.3f} ]
+[ {matrix[1,0]:7.3f}  {matrix[1,1]:7.3f}  {matrix[1,2]:7.3f} ]
+[ {matrix[2,0]:7.3f}  {matrix[2,1]:7.3f}  {matrix[2,2]:7.3f} ]
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     
-    matrix_str = ""
-    for i in range(matrix.shape[0]):
-        row_str = " | ".join([f"{matrix[i,j]:8.3f}" for j in range(matrix.shape[1])])
-        matrix_str += f"[ {row_str} ]\n"
+    # Matrix explanation
+    with st.expander("📖 Matrix Components Explanation"):
+        st.markdown("""
+        **3×3 Transformation Matrix Components:**
+        
+        | Component | Description | Formula |
+        |-----------|-------------|---------|
+        | **[0,0], [0,1], [1,0], [1,1]** | Linear transformation (rotation, scale, shear) | Combined from all transforms |
+        | **[0,2], [1,2]** | Translation (X, Y displacement) | `tx, ty` |
+        | **[2,0], [2,1]** | Perspective (unused in this implementation) | `0, 0` |
+        | **[2,2]** | Homogeneous coordinate | `1` |
+        
+        **Matrix Order:** Reflection → Scaling → Rotation → Shearing → Translation
+        """)
+
+def display_image_with_label(image: Image.Image, title: str, label: str = None):
+    """Display image with professional styling"""
+    col = st.columns(1)[0]
     
-    st.code(matrix_str, language='text')
+    # Convert image to bytes for display
+    img_buffer = io.BytesIO()
+    image.save(img_buffer, format='PNG')
+    img_bytes = img_buffer.getvalue()
+    
+    # Create HTML with label
+    html_content = f"""
+    <div class="card">
+        <h3 style="margin: 0 0 1rem 0; color: #1e293b;">{title}</h3>
+        <div class="image-container">
+            {f'<div class="image-label">{label}</div>' if label else ''}
+            <img src="data:image/png;base64,{base64.b64encode(img_bytes).decode()}" 
+                 style="width: 100%; height: auto; display: block;">
+        </div>
+    </div>
+    """
+    
+    st.markdown(html_content, unsafe_allow_html=True)
+
+def create_preset_buttons(transformer, current_params):
+    """Create preset transformation buttons"""
+    presets = transformer.get_preset_transformations()
+    
+    st.markdown("""
+    <div class="card">
+        <h3 style="margin: 0 0 1rem 0; color: #1e293b;">⚡ Preset Transformations</h3>
+        <p style="margin: 0 0 1rem 0; color: #64748b;">Quick apply common transformations</p>
+    """, unsafe_allow_html=True)
+    
+    # Create 4x2 grid for presets
+    cols = st.columns(4)
+    
+    for i, (name, params) in enumerate(presets.items()):
+        col = cols[i % 4]
+        
+        with col:
+            if st.button(f"**{name}**", key=f"preset_{i}", use_container_width=True):
+                # Update session state with preset values
+                for key, value in params.items():
+                    st.session_state[key] = value
+                st.rerun()
+    
+    st.markdown("</div>", unsafe_allow_html=True)
+
+def show_active_transformations(params):
+    """Show which transformations are active"""
+    active_transforms = []
+    
+    if params.get('translation_x', 0) != 0 or params.get('translation_y', 0) != 0:
+        active_transforms.append("🔄 Translation")
+    
+    if params.get('scaling_x', 1) != 1 or params.get('scaling_y', 1) != 1:
+        active_transforms.append("📏 Scaling")
+    
+    if params.get('rotation', 0) != 0:
+        active_transforms.append("🔄 Rotation")
+    
+    if params.get('shearing_x', 0) != 0 or params.get('shearing_y', 0) != 0:
+        active_transforms.append("🔀 Shearing")
+    
+    if params.get('reflection_horizontal', False) or params.get('reflection_vertical', False):
+        active_transforms.append("🔁 Reflection")
+    
+    if active_transforms:
+        st.markdown(f"""
+        <div class="info-message">
+            🔧 Active Transformations: {' • '.join(active_transforms)}
+        </div>
+        """, unsafe_allow_html=True)
+    else:
+        st.markdown("""
+        <div class="info-message">
+            ℹ️ No active transformations
+        </div>
+        """, unsafe_allow_html=True)
 
 def main():
     """Main application"""
-    st.set_page_config(
-        page_title="Matrix Transformation Studio",
-        page_icon="🔄",
-        layout="wide"
-    )
-    
-    st.title("🔄 Matrix Transformation Studio")
-    st.markdown("Image Processing dengan Matrix Transformations")
+    # Header
+    st.markdown("""
+    <div class="main-header">
+        <h1 style="margin: 0; font-size: 2.5rem; font-weight: 700;">Matrix Transformation Studio</h1>
+        <p style="margin: 1rem 0 0 0; font-size: 1.25rem; opacity: 0.9;">Advanced Image Processing with Matrix Operations</p>
+    </div>
+    """, unsafe_allow_html=True)
     
     # Initialize transformer
-    transformer = SimpleMatrixTransformer()
+    transformer = ProfessionalMatrixTransformer()
     
     # Sidebar
-    st.sidebar.header("🎛️ Kontrol Transformasi")
+    with st.sidebar:
+        st.markdown("""
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                    padding: 1.5rem; border-radius: 10px; margin-bottom: 1rem; text-align: center;">
+            <h3 style="margin: 0; color: white;">🎛️ Transformation Controls</h3>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # File upload
+        uploaded_file = st.file_uploader(
+            "📤 Upload Image",
+            type=['png', 'jpg', 'jpeg', 'bmp', 'tiff'],
+            help="Upload an image to apply transformations"
+        )
+        
+        # Demo mode
+        demo_mode = st.checkbox("🎨 Demo Mode", help="Use sample image for demonstration")
+        
+        if demo_mode:
+            sample_img = create_sample_image()
+            transformer.load_image(sample_img)
+            st.markdown('<div class="success-message">✅ Demo image loaded!</div>', unsafe_allow_html=True)
+        elif uploaded_file is not None:
+            if transformer.load_image(uploaded_file):
+                st.markdown('<div class="success-message">✅ Image loaded successfully!</div>', unsafe_allow_html=True)
+        
+        # Only show controls if image is loaded
+        if transformer.image is not None:
+            st.markdown("---")
+            
+            # Transformation tabs
+            tab1, tab2, tab3, tab4, tab5 = st.tabs([
+                "🔄 Translation", "📏 Scaling", "🔄 Rotation", "🔀 Shearing", "🔁 Reflection"
+            ])
+            
+            with tab1:
+                st.markdown("**Translation Parameters**")
+                tx = st.slider("X Translation (pixels)", -200, 200, 0, key="translation_x")
+                ty = st.slider("Y Translation (pixels)", -200, 200, 0, key="translation_y")
+                st.caption(f"Current: X={tx}, Y={ty}")
+            
+            with tab2:
+                st.markdown("**Scaling Parameters**")
+                sx = st.slider("X Scale Factor", 0.1, 3.0, 1.0, 0.1, key="scaling_x")
+                sy = st.slider("Y Scale Factor", 0.1, 3.0, 1.0, 0.1, key="scaling_y")
+                st.caption(f"Current: X={sx:.1f}x, Y={sy:.1f}x")
+            
+            with tab3:
+                st.markdown("**Rotation Parameters**")
+                rotation = st.slider("Rotation Angle (degrees)", -180, 180, 0, key="rotation")
+                st.caption(f"Current: {rotation}°")
+            
+            with tab4:
+                st.markdown("**Shearing Parameters**")
+                shear_x = st.slider("X Shear Factor", -1.0, 1.0, 0.0, 0.1, key="shearing_x")
+                shear_y = st.slider("Y Shear Factor", -1.0, 1.0, 0.0, 0.1, key="shearing_y")
+                st.caption(f"Current: X={shear_x:.1f}, Y={shear_y:.1f}")
+            
+            with tab5:
+                st.markdown("**Reflection Parameters**")
+                col1, col2 = st.columns(2)
+                with col1:
+                    reflect_h = st.checkbox("Horizontal Reflection", key="reflection_horizontal")
+                with col2:
+                    reflect_v = st.checkbox("Vertical Reflection", key="reflection_vertical")
+                st.caption(f"Current: H={reflect_h}, V={reflect_v}")
+            
+            # Reset button
+            if st.button("🔄 Reset All", use_container_width=True):
+                for key in list(st.session_state.keys()):
+                    if any(k in key for k in ['translation', 'scaling', 'rotation', 'shearing', 'reflection']):
+                        del st.session_state[key]
+                st.rerun()
     
-    # File upload
-    uploaded_file = st.sidebar.file_uploader(
-        "Upload Gambar",
-        type=['png', 'jpg', 'jpeg', 'bmp', 'tiff']
-    )
-    
-    # Demo mode
-    demo_mode = st.sidebar.checkbox("🎨 Demo Mode")
-    
-    if demo_mode:
-        sample_img = create_sample_image()
-        transformer.load_image(sample_img)
-        st.sidebar.success("✅ Demo image loaded!")
-    elif uploaded_file is not None:
-        if transformer.load_image(uploaded_file):
-            st.sidebar.success("✅ Image loaded!")
-    
-    # Only show controls if image is loaded
+    # Main content
     if transformer.image is not None:
-        # Transformation controls
-        st.sidebar.subheader("📐 Parameter Transformasi")
-        
-        # Translation
-        st.sidebar.markdown("**🔄 Translation**")
-        col1, col2 = st.sidebar.columns(2)
-        with col1:
-            tx = st.slider("X", -200, 200, 0)
-        with col2:
-            ty = st.slider("Y", -200, 200, 0)
-        
-        # Scaling
-        st.sidebar.markdown("**📏 Scaling**")
-        col3, col4 = st.sidebar.columns(2)
-        with col3:
-            sx = st.slider("X", 0.1, 3.0, 1.0, 0.1)
-        with col4:
-            sy = st.slider("Y", 0.1, 3.0, 1.0, 0.1)
-        
-        # Rotation
-        st.sidebar.markdown("**🔄 Rotation**")
-        rotation = st.slider("Sudut", -180, 180, 0)
-        
-        # Reflection
-        st.sidebar.markdown("**🔁 Reflection**")
-        col5, col6 = st.sidebar.columns(2)
-        with col5:
-            reflect_h = st.checkbox("Horizontal")
-        with col6:
-            reflect_v = st.checkbox("Vertical")
-        
-        # Presets
-        st.sidebar.subheader("⚡ Presets")
-        presets = transformer.get_preset_transformations()
-        selected_preset = st.sidebar.selectbox("Pilih Preset", ["None"] + list(presets.keys()))
-        
-        if selected_preset != "None":
-            preset = presets[selected_preset]
-            tx = preset['translation_x']
-            ty = preset['translation_y']
-            sx = preset['scaling_x']
-            sy = preset['scaling_y']
-            rotation = preset['rotation']
-            reflect_h = preset['reflection_horizontal']
-            reflect_v = preset['reflection_vertical']
-        
-        # Create parameters
+        # Get current parameters
         params = {
-            'translation_x': tx,
-            'translation_y': ty,
-            'scaling_x': sx,
-            'scaling_y': sy,
-            'rotation': rotation,
-            'shearing_x': 0,
-            'shearing_y': 0,
-            'reflection_horizontal': reflect_h,
-            'reflection_vertical': reflect_v
+            'translation_x': st.session_state.get('translation_x', 0),
+            'translation_y': st.session_state.get('translation_y', 0),
+            'scaling_x': st.session_state.get('scaling_x', 1.0),
+            'scaling_y': st.session_state.get('scaling_y', 1.0),
+            'rotation': st.session_state.get('rotation', 0),
+            'shearing_x': st.session_state.get('shearing_x', 0.0),
+            'shearing_y': st.session_state.get('shearing_y', 0.0),
+            'reflection_horizontal': st.session_state.get('reflection_horizontal', False),
+            'reflection_vertical': st.session_state.get('reflection_vertical', False)
         }
         
         # Create and apply transformation
         matrix = transformer.create_transformation_matrix(params)
-        transformed = transformer.apply_transformation(matrix)
+        transformed_image = transformer.apply_transformation(matrix)
         
-        # Display results
+        # Image comparison
         col1, col2 = st.columns(2)
         
         with col1:
-            st.subheader("📷 Original")
-            st.image(transformer.image, use_column_width=True)
+            display_image_with_label(transformer.image, "📷 Original Image", "ORIGINAL")
         
         with col2:
-            st.subheader("✨ Transformed")
-            st.image(transformed, use_column_width=True)
+            display_image_with_label(transformed_image, "✨ Transformed Image", "TRANSFORMED")
             
             # Download button
-            if st.button("💾 Download"):
-                img_buffer = io.BytesIO()
-                transformed.save(img_buffer, format='PNG')
-                img_buffer.seek(0)
-                st.download_button(
-                    label="📥 Download PNG",
-                    data=img_buffer,
-                    file_name="transformed_image.png",
-                    mime="image/png"
-                )
+            img_buffer = io.BytesIO()
+            transformed_image.save(img_buffer, format='PNG')
+            img_buffer.seek(0)
+            
+            st.download_button(
+                label="💾 Download Transformed Image",
+                data=img_buffer,
+                file_name="transformed_image.png",
+                mime="image/png",
+                use_container_width=True
+            )
         
-        # Display matrix
-        display_matrix(matrix)
+        # Matrix visualization
+        display_professional_matrix(matrix)
         
-        # Active transformations
-        active = []
-        if tx != 0 or ty != 0:
-            active.append("Translation")
-        if sx != 1 or sy != 1:
-            active.append("Scaling")
-        if rotation != 0:
-            active.append("Rotation")
-        if reflect_h or reflect_v:
-            active.append("Reflection")
+        # Preset transformations
+        create_preset_buttons(transformer, params)
         
-        if active:
-            st.info(f"🔧 Active: {', '.join(active)}")
+        # Active transformations indicator
+        show_active_transformations(params)
     
     else:
-        st.info("👆 Upload image or enable Demo Mode")
+        # Welcome screen
+        st.markdown("""
+        <div class="card">
+            <h3 style="margin: 0 0 1rem 0; color: #1e293b;">👆 Welcome to Matrix Transformation Studio</h3>
+            <p style="margin: 0 0 1rem 0; color: #64748b;">Upload an image or enable Demo Mode to start transforming!</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Feature showcase
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            st.markdown("""
+            <div class="card">
+                <h4 style="margin: 0 0 0.5rem 0; color: #667eea;">🔄 Translation</h4>
+                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Move objects along X and Y axes with pixel precision</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col2:
+            st.markdown("""
+            <div class="card">
+                <h4 style="margin: 0 0 0.5rem 0; color: #764ba2;">📏 Scaling</h4>
+                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Resize objects with independent X and Y scale factors</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col3:
+            st.markdown("""
+            <div class="card">
+                <h4 style="margin: 0 0 0.5rem 0; color: #667eea;">🔄 Rotation</h4>
+                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Rotate objects by any angle with smooth interpolation</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        col4, col5 = st.columns(2)
+        
+        with col4:
+            st.markdown("""
+            <div class="card">
+                <h4 style="margin: 0 0 0.5rem 0; color: #764ba2;">🔀 Shearing</h4>
+                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Apply skew transformations for artistic effects</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col5:
+            st.markdown("""
+            <div class="card">
+                <h4 style="margin: 0 0 0.5rem 0; color: #667eea;">🔁 Reflection</h4>
+                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Mirror objects horizontally and/or vertically</p>
+            </div>
+            """, unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
