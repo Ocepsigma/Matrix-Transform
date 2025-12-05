@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-🔄 Matrix Transformation Studio - Production Ready Version
-Sama seperti versi awal dengan proteksi DecompressionBombError
+🔄 Matrix Transformation Studio - Production Version (No Demo Mode)
+Sama seperti versi awal dengan proteksi DecompressionBombError tapi tanpa demo mode
 """
 
 import streamlit as st
@@ -457,45 +457,6 @@ class SafeMatrixTransformer:
             }
         }
 
-def create_sample_image():
-    """Create sample image untuk demo"""
-    try:
-        # Create gradient background
-        width, height = 400, 300
-        img = Image.new('RGB', (width, height), 'white')
-        draw = ImageDraw.Draw(img)
-        
-        # Create gradient
-        for y in range(height):
-            color_value = int(255 * (1 - y / height))
-            color = (color_value, 100, 255 - color_value)
-            draw.line([(0, y), (width, y)], fill=color)
-        
-        # Add geometric shapes
-        # Rectangle
-        draw.rectangle([50, 50, 150, 150], fill='red', outline='darkred', width=3)
-        
-        # Circle
-        draw.ellipse([250, 100, 350, 200], fill='green', outline='darkgreen', width=3)
-        
-        # Triangle
-        draw.polygon([(200, 250), (250, 150), (300, 250)], fill='blue', outline='darkblue', width=3)
-        
-        # Add text
-        try:
-            # Try to use a nice font
-            font = ImageFont.truetype("arial.ttf", 24)
-        except:
-            font = ImageFont.load_default()
-        
-        draw.text((width//2, height//2), "MATRIX", fill='white', font=font, anchor='mm')
-        draw.text((width//2, height//2 + 30), "STUDIO", fill='white', font=font, anchor='mm')
-        
-        return img
-    except Exception as e:
-        st.error(f"❌ Error creating sample image: {str(e)}")
-        return Image.new('RGB', (400, 300), 'white')
-
 def display_professional_matrix(matrix: np.ndarray, title: str = "Transformation Matrix"):
     """Display matrix dengan professional styling"""
     st.markdown(f"""
@@ -639,14 +600,7 @@ def main():
                 help="Upload an image to apply transformations (Max: 10MB, 50MP)"
             )
             
-            # Demo mode
-            demo_mode = st.checkbox("🎨 Demo Mode", help="Use sample image for demonstration")
-            
-            if demo_mode:
-                sample_img = create_sample_image()
-                transformer.safe_load_image(sample_img)
-                st.markdown('<div class="success-message">✅ Demo image loaded!</div>', unsafe_allow_html=True)
-            elif uploaded_file is not None:
+            if uploaded_file is not None:
                 # Cek ukuran file
                 file_size = uploaded_file.size
                 max_file_size = 10 * 1024 * 1024  # 10MB
@@ -762,7 +716,7 @@ def main():
             st.markdown("""
             <div class="card">
                 <h3 style="margin: 0 0 1rem 0; color: #1e293b;">👆 Welcome to Matrix Transformation Studio</h3>
-                <p style="margin: 0 0 1rem 0; color: #64748b;">Upload an image or enable Demo Mode to start transforming!</p>
+                <p style="margin: 0 0 1rem 0; color: #64748b;">Upload an image to start transforming!</p>
                 <div style="background: #fef3c7; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
                     <strong>🔒 Security Notice:</strong><br>
                     • Maximum file size: 10MB<br>
