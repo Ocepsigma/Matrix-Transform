@@ -2,7 +2,7 @@
 """
 🔄 Matrix Transformation Studio - Multi Page Version
 Page 1: Main Application
-Page 2: Creator Profile - Yoseph Sihite
+Page 2: Creator Profile - Yoseph Sihite dengan foto dari GitHub
 """
 
 import streamlit as st
@@ -14,6 +14,7 @@ import io
 import base64
 import sys
 import os
+import requests
 from typing import Dict, Any, Tuple
 import colorsys
 import warnings
@@ -206,8 +207,85 @@ st.markdown("""
         border: 1px solid #f59e0b;
         color: #92400e;
     }
+    
+    /* Profile photo styling */
+    .profile-photo {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid white;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        margin: 0 auto 1rem;
+        display: block;
+    }
+    
+    .photo-placeholder {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        margin: 0 auto 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 4px solid white;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    
+    .photo-loading {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: #f1f5f9;
+        margin: 0 auto 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 4px solid white;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        font-size: 3rem;
+        color: #64748b;
+    }
 </style>
 """, unsafe_allow_html=True)
+
+def load_profile_photo():
+    """Load profile photo dari GitHub"""
+    try:
+        # GitHub raw URL untuk foto
+        github_username = "yosephsihite"  # Ganti dengan username GitHub Anda
+        repo_name = "matrix-transformation-studio"  # Ganti dengan nama repo Anda
+        photo_filename = "foto_yoseph.jpg"
+        
+        # URL GitHub raw
+        photo_url = f"https://raw.githubusercontent.com/{github_username}/{repo_name}/main/{photo_filename}"
+        
+        # Download foto
+        response = requests.get(photo_url, timeout=10)
+        
+        if response.status_code == 200:
+            # Load image
+            image = Image.open(io.BytesIO(response.content))
+            
+            # Resize untuk profil (200x200)
+            image = image.resize((200, 200), Image.Resampling.LANCZOS)
+            
+            # Convert to bytes untuk display
+            img_buffer = io.BytesIO()
+            image.save(img_buffer, format='JPEG')
+            img_bytes = img_buffer.getvalue()
+            
+            # Encode ke base64
+            img_base64 = base64.b64encode(img_bytes).decode()
+            
+            return img_base64, True
+        else:
+            return None, False
+            
+    except Exception as e:
+        st.warning(f"⚠️ Tidak dapat memuat foto dari GitHub: {str(e)}")
+        return None, False
 
 class SafeMatrixTransformer:
     """Matrix Transformer dengan proteksi DecompressionBombError"""
@@ -734,7 +812,7 @@ def main_app():
             """, unsafe_allow_html=True)
 
 def profile_page():
-    """Profile page for Yoseph Sihite"""
+    """Profile page for Yoseph Sihite dengan foto dari GitHub"""
     # Header
     st.markdown("""
     <div class="profile-header">
@@ -743,16 +821,33 @@ def profile_page():
     </div>
     """, unsafe_allow_html=True)
     
+    # Load profile photo
+    photo_base64, photo_loaded = load_profile_photo()
+    
     # Profile section
     col1, col2 = st.columns([1, 2])
     
     with col1:
         st.markdown("""
         <div class="profile-card">
-            <div style="text-align: center; margin-bottom: 1rem;">
-                <div style="width: 200px; height: 200px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0 auto; display: flex; align-items: center; justify-content: center;">
-                    <div style="color: white; font-size: 4rem; font-weight: bold;">YS</div>
+            <div style="text-align: center;">
+        """, unsafe_allow_html=True)
+        
+        if photo_loaded and photo_base64:
+            st.markdown(f"""
+                <img src="data:image/jpeg;base64,{photo_base64}" class="profile-photo" alt="Yoseph Sihite">
+            """, unsafe_allow_html=True)
+        else:
+            st.markdown("""
+                <div class="photo-loading">
+                    ⏳
                 </div>
+                <p style="text-align: center; margin-top: 0.5rem; color: #64748b; font-size: 0.9rem;">
+                    Loading photo from GitHub...
+                </p>
+            """, unsafe_allow_html=True)
+        
+        st.markdown("""
             </div>
             <h3 style="text-align: center; margin: 1rem 0 0.5rem 0; color: #1e293b;">Yoseph Sihite</h3>
             <p style="text-align: center; margin: 0; color: #64748b;">Computer Vision Developer</p>
@@ -776,20 +871,21 @@ def profile_page():
             
             <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🎯 Areas of Expertise</h4>
             <ul style="margin: 0 0 1rem 0; color: #64748b; line-height: 1.6;">
-                <li>Linear Algebra & Matrix Transformations</li>
                 <li>Computer Vision & Image Processing</li>
+                <li>Matrix Transformations & Linear Algebra</li>
                 <li>Web Development (Python, Streamlit)</li>
-                <li>Mathematical Visualization</li>
+                <li>Machine Learning & AI Applications</li>
                 <li>Educational Technology Development</li>
             </ul>
             
             <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🛠️ Technical Skills</h4>
             <div style="margin: 0 0 1rem 0;">
                 <span style="display: inline-block; background: #667eea; color: white; padding: 0.25rem 0.5rem; border-radius: 15px; margin: 0.25rem; font-size: 0.8rem;">Python</span>
-                <span style="display: inline-block; background: #764ba2; color: white; padding: 0.25rem 0.5rem; border-radius: 15px; margin: 0.25rem; font-size: 0.8rem;">NumPy</span>
-                <span style="display: inline-block; background: #667eea; color: white; padding: 0.25rem 0.5rem; border-radius: 15px; margin: 0.25rem; font-size: 0.8rem;">OpenCV</span>
+                <span style="display: inline-block; background: #764ba2; color: white; padding: 0.25rem 0.5rem; border-radius: 15px; margin: 0.25rem; font-size: 0.8rem;">JavaScript</span>
+                <span style="display: inline-block; background: #667eea; color: white; padding: 0.25rem 0.5rem; border-radius: 15px; margin: 0.25rem; font-size: 0.8rem;">React</span>
                 <span style="display: inline-block; background: #764ba2; color: white; padding: 0.25rem 0.5rem; border-radius: 15px; margin: 0.25rem; font-size: 0.8rem;">Streamlit</span>
-                <span style="display: inline-block; background: #667eea; color: white; padding: 0.25rem 0.5rem; border-radius: 15px; margin: 0.25rem; font-size: 0.8rem;">PIL</span>
+                <span style="display: inline-block; background: #667eea; color: white; padding: 0.25rem 0.5rem; border-radius: 15px; margin: 0.25rem; font-size: 0.8rem;">OpenCV</span>
+                <span style="display: inline-block; background: #764ba2; color: white; padding: 0.25rem 0.5rem; border-radius: 15px; margin: 0.25rem; font-size: 0.8rem;">NumPy</span>
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -807,7 +903,7 @@ def profile_page():
         <p style="margin: 0 0 1rem 0; color: #92400e; line-height: 1.6;">
             <strong>Memberikan Kuisioner kepada Orang-Orang:</strong> Melalui aplikasi web ini, saya berbagi 
             pengetahuan tentang transformasi matriks kepada orang banyak, dari mahasiswa hingga praktisi, 
-            dengan cara yang mudah diakses dan menarik. Setiap transformasi yang diterapkan adalah pembelajaran 
+            dengan cara yang mudah diakses dan dimengerti. Setiap transformasi yang diterapkan adalah pembelajaran 
             tentang bagaimana matematika dapat mengubah dunia visual kita.
         </p>
     </div>
@@ -850,7 +946,7 @@ def profile_page():
             <ul style="margin: 0 0 1rem 0; color: #64748b; line-height: 1.6;">
                 <li><strong>Konsep Visualisasi:</strong> Mengubah konsep matriks abstrak menjadi visualisasi interaktif yang mudah dipahami</li>
                 <li><strong>Educational Design:</strong> Merancang alur pembelajaran dari konsep dasar hingga aplikasi kompleks</li>
-                <li><strong>Interactive Learning:</strong> Membuat pengalaman belajar yang interaktif dengan feedback real-time</li>
+                <li><strong>Interactive Learning:</strong> Membuat pembelajaran interaktif dengan feedback real-time</li>
                 <li><strong>Mathematical Accuracy:</strong> Memastikan semua transformasi secara matematis benar dan konsisten</li>
             </ul>
         </div>
@@ -935,6 +1031,11 @@ def profile_page():
                 <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔗</div>
                 <strong>GitHub:</strong><br>
                 <a href="https://github.com/yosephsihite" target="_blank" style="color: #667eea; text-decoration: none;">github.com/yosephsihite</a>
+            </div>
+            <div style="text-align: center; padding: 1rem; background: #f8fafc; border-radius: 8px;">
+                <div style="font-size: 2rem; margin-bottom: 0.5rem;">💼</div>
+                <strong>LinkedIn:</strong><br>
+                <a href="https://linkedin.com/in/yosephsihite" target="_blank" style="color: #667eea; text-decoration: none;">linkedin.com/in/yosephsihite</a>
             </div>
             <div style="text-align: center; padding: 1rem; background: #f8fafc; border-radius: 8px;">
                 <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎓</div>
