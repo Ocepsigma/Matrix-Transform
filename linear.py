@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-🔄 Matrix Transformation Studio - Multi Page Version
+🔄 Matrix Transformation Studio - Multi Page Version dengan Debug Mode
 Page 1: Main Application
 Page 2: Creator Profile - Yoseph Sihite dengan foto dari GitHub
 """
@@ -138,6 +138,28 @@ st.markdown("""
         text-align: center;
     }
     
+    /* Warning message */
+    .warning-message {
+        background: #f59e0b;
+        color: white;
+        padding: 1rem;
+        border-radius: 8px;
+        margin: 1rem 0;
+        text-align: center;
+        font-weight: 600;
+    }
+    
+    /* Error message */
+    .error-message {
+        background: #ef4444;
+        color: white;
+        padding: 1rem;
+        border-radius: 8px;
+        margin: 1rem 0;
+        text-align: center;
+        font-weight: 600;
+    }
+    
     /* Image container */
     .image-container {
         position: relative;
@@ -208,6 +230,16 @@ st.markdown("""
         color: #92400e;
     }
     
+    .debug-card {
+        background: #1f2937;
+        color: #f8fafc;
+        padding: 1rem;
+        border-radius: 8px;
+        margin: 1rem 0;
+        font-family: 'Courier New', monospace;
+        font-size: 0.8rem;
+    }
+    
     /* Profile photo styling */
     .profile-photo {
         width: 200px;
@@ -231,6 +263,8 @@ st.markdown("""
         justify-content: center;
         border: 4px solid white;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        font-size: 3rem;
+        color: white;
     }
     
     .photo-loading {
@@ -244,48 +278,148 @@ st.markdown("""
         justify-content: center;
         border: 4px solid white;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        font-size: 3rem;
+        font-size: 2rem;
         color: #64748b;
+        animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    .debug-info {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 1rem 0;
+        font-size: 0.9rem;
     }
 </style>
 """, unsafe_allow_html=True)
 
 def load_profile_photo():
-    """Load profile photo dari GitHub"""
+    """Load profile photo dari GitHub dengan debug info"""
     try:
-        # GitHub raw URL untuk foto
-        github_username = "yosephsihite"  # Ganti dengan username GitHub Anda
-        repo_name = "matrix-transformation-studio"  # Ganti dengan nama repo Anda
-        photo_filename = "foto_yoseph.jpg"
+        # Konfigurasi - GANTI DENGAN INFORMASI ANDA
+        github_username = "yosephsihite"  # GANTI dengan username GitHub Anda
+        repo_name = "matrix-transformation-studio"  # GANTI dengan nama repo Anda
+        photo_filename = "foto_yoseph.jpg"  # GANTI dengan nama file foto Anda
         
-        # URL GitHub raw
+        # Debug info
+        st.markdown("""
+        <div class="debug-card">
+            <strong>🔍 Debug Information:</strong><br>
+            • GitHub Username: {}<br>
+            • Repository: {}<br>
+            • Photo Filename: {}<br>
+            • Expected URL: {}
+        </div>
+        """.format(github_username, repo_name, photo_filename, 
+                f"https://raw.githubusercontent.com/{github_username}/{repo_name}/main/{photo_filename}"), 
+        unsafe_allow_html=True)
+        
+        # Test URL
         photo_url = f"https://raw.githubusercontent.com/{github_username}/{repo_name}/main/{photo_filename}"
         
-        # Download foto
-        response = requests.get(photo_url, timeout=10)
+        st.markdown(f"""
+        <div class="debug-info">
+            <strong>🌐 Testing URL:</strong><br>
+            <a href="{photo_url}" target="_blank" style="color: #667eea; text-decoration: none;">
+                {photo_url}
+            </a>
+        </div>
+        """, unsafe_allow_html=True)
         
-        if response.status_code == 200:
-            # Load image
-            image = Image.open(io.BytesIO(response.content))
+        # Download foto dengan timeout lebih panjang
+        st.markdown("""
+        <div class="debug-info">
+            <strong>📥 Download Status:</strong>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        try:
+            response = requests.get(photo_url, timeout=30)
             
-            # Resize untuk profil (200x200)
-            image = image.resize((200, 200), Image.Resampling.LANCZOS)
+            if response.status_code == 200:
+                st.markdown("""
+                <div class="success-message">
+                    ✅ Photo found! Size: {} bytes
+                </div>
+                """.format(len(response.content)), unsafe_allow_html=True)
+                
+                # Load image
+                image = Image.open(io.BytesIO(response.content))
+                
+                # Resize untuk profil (200x200)
+                image = image.resize((200, 200), Image.Resampling.LANCZOS)
+                
+                # Convert ke bytes untuk display
+                img_buffer = io.BytesIO()
+                image.save(img_buffer, format='JPEG', quality=85)
+                img_bytes = img_buffer.getvalue()
+                
+                # Encode ke base64
+                img_base64 = base64.b64encode(img_bytes).decode()
+                
+                return img_base64, True
+                
+            else:
+                st.markdown(f"""
+                <div class="error-message">
+                    ❌ Photo not found! HTTP {response.status_code}
+                </div>
+                """, unsafe_allow_html=True)
+                return None, False
+                
+        except requests.exceptions.Timeout:
+            st.markdown("""
+                <div class="warning-message">
+                    ⏱️ Timeout! Check your internet connection
+                </div>
+                """, unsafe_allow_html=True)
+            return None, False
             
-            # Convert to bytes untuk display
-            img_buffer = io.BytesIO()
-            image.save(img_buffer, format='JPEG')
-            img_bytes = img_buffer.getvalue()
+        except requests.exceptions.ConnectionError:
+            st.markdown("""
+                <div class="error-message">
+                    🌐 Connection Error! Check your internet connection
+                </div>
+                """, unsafe_allow_html=True)
+            return None, False
             
-            # Encode ke base64
-            img_base64 = base64.b64encode(img_bytes).decode()
-            
-            return img_base64, True
-        else:
+        except Exception as e:
+            st.markdown(f"""
+                <div class="error-message">
+                    ❌ Error: {str(e)}
+                </div>
+                """, unsafe_allow_html=True)
             return None, False
             
     except Exception as e:
-        st.warning(f"⚠️ Tidak dapat memuat foto dari GitHub: {str(e)}")
+        st.markdown(f"""
+        <div class="error-message">
+            ❌ System Error: {str(e)}
+        </div>
+        """, unsafe_allow_html=True)
         return None, False
+
+def test_github_access():
+    """Test akses ke GitHub"""
+    try:
+        # Test API GitHub
+        api_url = "https://api.github.com/repos/yosephsihite/matrix-transformation-studio"
+        response = requests.get(api_url, timeout=10)
+        
+        if response.status_code == 200:
+            repo_data = response.json()
+            return True, repo_data.get('default_branch', 'main')
+        else:
+            return False, None
+            
+    except Exception as e:
+        return False, None
 
 class SafeMatrixTransformer:
     """Matrix Transformer dengan proteksi DecompressionBombError"""
@@ -812,7 +946,7 @@ def main_app():
             """, unsafe_allow_html=True)
 
 def profile_page():
-    """Profile page for Yoseph Sihite dengan foto dari GitHub"""
+    """Profile page for Yoseph Sihite dengan foto dari GitHub dan debug mode"""
     # Header
     st.markdown("""
     <div class="profile-header">
@@ -821,7 +955,64 @@ def profile_page():
     </div>
     """, unsafe_allow_html=True)
     
-    # Load profile photo
+    # Debug section
+    with st.expander("🔍 Debug Photo Loading"):
+        st.markdown("""
+        <div class="debug-card">
+            <h3>🔍 Debug Photo Loading</h3>
+            <p><strong>Step 1: Check GitHub Access</strong></p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Test GitHub access
+        github_accessible, default_branch = test_github_access()
+        
+        if github_accessible:
+            st.markdown("""
+            <div class="success-message">
+                ✅ GitHub API accessible! Default branch: {default_branch}
+            </div>
+            """, unsafe_allow_html=True)
+        else:
+            st.markdown("""
+            <div class="error-message">
+                ❌ GitHub API not accessible! Check your internet connection
+            </div>
+            """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="debug-card">
+            <p><strong>Step 2: Check Photo File</strong></p>
+            <p>Click the button below to manually check if your photo exists:</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Manual check button
+        if st.button("🔍 Check Photo File", use_container_width=True):
+            st.markdown("""
+            <div class="debug-info">
+                <strong>Manual Check:</strong><br>
+                1. Open this URL in your browser:<br>
+                <a href="https://github.com/yosephsihite/matrix-transformation-studio" target="_blank">https://github.com/yosephsihite/matrix-transformation-studio</a><br>
+                2. Look for file: <code>foto_yoseph.jpg</code><br>
+                3. If file exists, the URL should work
+            </div>
+            """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="debug-card">
+            <p><strong>Step 3: Common Issues & Solutions:</strong></p>
+            <ul style="color: #64748b; line-height: 1.6;">
+                <li><strong>File not found:</strong> Check filename and repository name</li>
+                <li><strong>Private repository:</strong> Make repo public or use GitHub token</li>
+                <li><strong>Wrong path:</strong> File must be in root folder</li>
+                <li><strong>Case sensitivity:</strong> Check exact filename spelling</li>
+                <li><strong>Network issues:</strong> Check internet connection</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # Load profile photo with debug
     photo_base64, photo_loaded = load_profile_photo()
     
     # Profile section
@@ -830,7 +1021,7 @@ def profile_page():
     with col1:
         st.markdown("""
         <div class="profile-card">
-            <div style="text-align: center;">
+            <div style="text-align: center; margin-bottom: 1rem;">
         """, unsafe_allow_html=True)
         
         if photo_loaded and photo_base64:
@@ -842,7 +1033,7 @@ def profile_page():
                 <div class="photo-loading">
                     ⏳
                 </div>
-                <p style="text-align: center; margin-top: 0.5rem; color: #64748b; font-size: 0.9rem;">
+                <p style="text-align: center; margin-top: 0.5rem; color: #64748b;">
                     Loading photo from GitHub...
                 </p>
             """, unsafe_allow_html=True)
@@ -874,8 +1065,8 @@ def profile_page():
                 <li>Computer Vision & Image Processing</li>
                 <li>Matrix Transformations & Linear Algebra</li>
                 <li>Web Development (Python, Streamlit)</li>
+                <li>Python Programming & Data Science</li>
                 <li>Machine Learning & AI Applications</li>
-                <li>Educational Technology Development</li>
             </ul>
             
             <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🛠️ Technical Skills</h4>
@@ -946,7 +1137,7 @@ def profile_page():
             <ul style="margin: 0 0 1rem 0; color: #64748b; line-height: 1.6;">
                 <li><strong>Konsep Visualisasi:</strong> Mengubah konsep matriks abstrak menjadi visualisasi interaktif yang mudah dipahami</li>
                 <li><strong>Educational Design:</strong> Merancang alur pembelajaran dari konsep dasar hingga aplikasi kompleks</li>
-                <li><strong>Interactive Learning:</strong> Membuat pembelajaran interaktif dengan feedback real-time</li>
+                <li><strong>Interactive Learning:</strong> Membuat pengalaman belajar yang interaktif dengan feedback real-time</li>
                 <li><strong>Mathematical Accuracy:</strong> Memastikan semua transformasi secara matematis benar dan konsisten</li>
             </ul>
         </div>
@@ -1005,7 +1196,7 @@ def profile_page():
         
         <div style="background: #f8fafc; padding: 1rem; border-radius: 8px; margin: 1rem 0; border-left: 4px solid #667eea;">
             <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">📖 Tujuan Pembelajaran:</h4>
-            <ul style="margin: 0; color: #64748b; line-height: 1.6;">
+            <ul style="margin: 0 0 1rem 0; color: #64748b; line-height: 1.6;">
                 <li>Mengimplementasikan transformasi matriks dalam aplikasi nyata</li>
                 <li>Memvisualisasikan konsep abstrak aljabar linear</li>
                 <li>Menghubungkan teori matematika dengan aplikasi praktis</li>
