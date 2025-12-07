@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-🔄 Matrix Transformation Studio - Production Version (No Demo Mode)
-Sama seperti versi awal dengan proteksi DecompressionBombError tapi tanpa demo mode
+🔄 Matrix Transformation Studio - Multi Page Version
+Page 1: Main Application
+Page 2: Creator Profile
 """
 
 import streamlit as st
@@ -32,7 +33,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS untuk styling yang sama seperti awal
+# Custom CSS untuk styling
 st.markdown("""
 <style>
     /* Main container styling */
@@ -158,27 +159,42 @@ st.markdown("""
         z-index: 10;
     }
     
-    /* Preset button styling */
-    .preset-container {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 0.5rem;
-        margin: 1rem 0;
-    }
-    
-    .preset-button {
-        background: white;
-        border: 2px solid #e2e8f0;
-        border-radius: 8px;
-        padding: 1rem;
+    /* Profile card styling */
+    .profile-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 2rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
         text-align: center;
-        transition: all 0.3s ease;
-        cursor: pointer;
+        color: white;
     }
     
-    .preset-button:hover {
-        border-color: #667eea;
-        background: #f0f4ff;
+    .profile-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 1rem;
+        border: 1px solid #e2e8f0;
+    }
+    
+    .team-card {
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        padding: 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 1rem;
+        border: 1px solid #e2e8f0;
+    }
+    
+    .contribution-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 1rem;
+        border: 1px solid #e2e8f0;
+        border-left: 4px solid #667eea;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -457,324 +473,447 @@ class SafeMatrixTransformer:
             }
         }
 
-def display_professional_matrix(matrix: np.ndarray, title: str = "Transformation Matrix"):
-    """Display matrix dengan professional styling"""
-    st.markdown(f"""
-    <div class="matrix-card">
-        <h3 style="margin: 0 0 1rem 0; color: #1e293b;">{title}</h3>
-        <div class="matrix-display">
-[ {matrix[0,0]:7.3f}  {matrix[0,1]:7.3f}  {matrix[0,2]:7.3f} ]
-[ {matrix[1,0]:7.3f}  {matrix[1,1]:7.3f}  {matrix[1,2]:7.3f} ]
-[ {matrix[2,0]:7.3f}  {matrix[2,1]:7.3f}  {matrix[2,2]:7.3f} ]
+def main_app():
+    """Main Matrix Transformation Application"""
+    # Header
+    st.markdown("""
+    <div class="main-header">
+        <h1 style="margin: 0; font-size: 2.5rem; font-weight: 700;">Matrix Transformation Studio</h1>
+        <p style="margin: 1rem 0 0 0; font-size: 1.25rem; opacity: 0.9;">Advanced Image Processing with Matrix Operations</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Initialize transformer
+    transformer = SafeMatrixTransformer()
+    
+    # Sidebar
+    with st.sidebar:
+        st.markdown("""
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                    padding: 1.5rem; border-radius: 10px; margin-bottom: 1rem; text-align: center;">
+            <h3 style="margin: 0; color: white;">🎛️ Transformation Controls</h3>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # File upload dengan proteksi
+        uploaded_file = st.file_uploader(
+            "📤 Upload Image",
+            type=['png', 'jpg', 'jpeg', 'bmp', 'tiff'],
+            help="Upload an image to apply transformations (Max: 10MB, 50MP)"
+        )
+        
+        if uploaded_file is not None:
+            # Cek ukuran file
+            file_size = uploaded_file.size
+            max_file_size = 10 * 1024 * 1024  # 10MB
+            
+            if file_size > max_file_size:
+                st.error(f"❌ File terlalu besar! ({file_size/1024/1024:.1f}MB)")
+                st.info(f"💡 Maksimal: {max_file_size/1024/1024}MB")
+            else:
+                if transformer.safe_load_image(uploaded_file):
+                    st.markdown('<div class="success-message">✅ Image loaded successfully!</div>', unsafe_allow_html=True)
+        
+        # Only show controls if image is loaded
+        if transformer.image is not None:
+            st.markdown("---")
+            
+            # Transformation tabs
+            tab1, tab2, tab3, tab4, tab5 = st.tabs([
+                "🔄 Translation", "📏 Scaling", "🔄 Rotation", "🔀 Shearing", "🔁 Reflection"
+            ])
+            
+            with tab1:
+                st.markdown("**Translation Parameters**")
+                tx = st.slider("X Translation (pixels)", -200, 200, 0, key="translation_x")
+                ty = st.slider("Y Translation (pixels)", -200, 200, 0, key="translation_y")
+                st.caption(f"Current: X={tx}, Y={ty}")
+            
+            with tab2:
+                st.markdown("**Scaling Parameters**")
+                sx = st.slider("X Scale Factor", 0.1, 3.0, 1.0, 0.1, key="scaling_x")
+                sy = st.slider("Y Scale Factor", 0.1, 3.0, 1.0, 0.1, key="scaling_y")
+                st.caption(f"Current: X={sx:.1f}x, Y={sy:.1f}x")
+            
+            with tab3:
+                st.markdown("**Rotation Parameters**")
+                rotation = st.slider("Rotation Angle (degrees)", -180, 180, 0, key="rotation")
+                st.caption(f"Current: {rotation}°")
+            
+            with tab4:
+                st.markdown("**Shearing Parameters**")
+                shear_x = st.slider("X Shear Factor", -1.0, 1.0, 0.0, 0.1, key="shearing_x")
+                shear_y = st.slider("Y Shear Factor", -1.0, 1.0, 0.0, 0.1, key="shearing_y")
+                st.caption(f"Current: X={shear_x:.1f}, Y={shear_y:.1f}")
+            
+            with tab5:
+                st.markdown("**Reflection Parameters**")
+                col1, col2 = st.columns(2)
+                with col1:
+                    reflect_h = st.checkbox("Horizontal Reflection", key="reflection_horizontal")
+                with col2:
+                    reflect_v = st.checkbox("Vertical Reflection", key="reflection_vertical")
+                st.caption(f"Current: H={reflect_h}, V={reflect_v}")
+            
+            # Presets
+            st.markdown("---")
+            st.subheader("⚡ Preset Transformations")
+            presets = transformer.get_preset_transformations()
+            selected_preset = st.selectbox("Choose preset:", ["None"] + list(presets.keys()))
+            
+            if selected_preset != "None":
+                preset = presets[selected_preset]
+                st.session_state.update(preset)
+                st.rerun()
+            
+            # Reset button
+            if st.button("🔄 Reset All", use_container_width=True):
+                keys_to_remove = ['translation_x', 'translation_y', 'scaling_x', 'scaling_y', 'rotation', 'shearing_x', 'shearing_y', 'reflection_horizontal', 'reflection_vertical']
+                for key in keys_to_remove:
+                    if key in st.session_state:
+                        del st.session_state[key]
+                st.rerun()
+    
+    # Main content
+    if transformer.image is not None:
+        # Get current parameters
+        params = {
+            'translation_x': st.session_state.get('translation_x', 0),
+            'translation_y': st.session_state.get('translation_y', 0),
+            'scaling_x': st.session_state.get('scaling_x', 1.0),
+            'scaling_y': st.session_state.get('scaling_y', 1.0),
+            'rotation': st.session_state.get('rotation', 0),
+            'shearing_x': st.session_state.get('shearing_x', 0.0),
+            'shearing_y': st.session_state.get('shearing_y', 0.0),
+            'reflection_horizontal': st.session_state.get('reflection_horizontal', False),
+            'reflection_vertical': st.session_state.get('reflection_vertical', False)
+        }
+        
+        # Create and apply transformation
+        matrix = transformer.create_transformation_matrix(params)
+        transformed_image = transformer.safe_apply_transformation(matrix)
+        
+        # Display results
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.subheader("📷 Original Image")
+            st.image(transformer.image, use_container_width=True, caption="ORIGINAL")
+        
+        with col2:
+            st.subheader("✨ Transformed Image")
+            st.image(transformed_image, use_container_width=True, caption="TRANSFORMED")
+            
+            # Download button
+            if transformed_image is not None:
+                img_buffer = io.BytesIO()
+                transformed_image.save(img_buffer, format='PNG')
+                img_buffer.seek(0)
+                
+                st.download_button(
+                    label="💾 Download Transformed Image",
+                    data=img_buffer,
+                    file_name="transformed_image.png",
+                    mime="image/png",
+                    use_container_width=True
+                )
+        
+        # Display matrix
+        st.subheader("📊 Transformation Matrix")
+        
+        # Format matrix for display
+        matrix_str = ""
+        for i in range(matrix.shape[0]):
+            row_str = " | ".join([f"{matrix[i,j]:8.3f}" for j in range(matrix.shape[1])])
+            matrix_str += f"[ {row_str} ]\n"
+        
+        st.code(matrix_str, language='text')
+        
+        # Matrix explanation
+        with st.expander("📖 Matrix Components Explanation"):
+            st.markdown("""
+            **3×3 Transformation Matrix Components:**
+            
+            | Component | Description | Formula |
+            |-----------|-------------|---------|
+            | **[0,0], [0,1], [1,0], [1,1]** | Linear transformation (rotation, scale, shear) | Combined from all transforms |
+            | **[0,2], [1,2]** | Translation (X, Y displacement) | `tx, ty` |
+            | **[2,0], [2,1]** | Perspective (unused in this implementation) | `0, 0` |
+            | **[2,2]** | Homogeneous coordinate | `1` |
+            
+            **Matrix Order:** Reflection → Scaling → Rotation → Shearing → Translation
+            """)
+        
+        # Active transformations
+        active = []
+        if params.get('translation_x', 0) != 0 or params.get('translation_y', 0) != 0:
+            active.append("Translation")
+        if params.get('scaling_x', 1) != 1 or params.get('scaling_y', 1) != 1:
+            active.append("Scaling")
+        if params.get('rotation', 0) != 0:
+            active.append("Rotation")
+        if params.get('shearing_x', 0) != 0 or params.get('shearing_y', 0) != 0:
+            active.append("Shearing")
+        if params.get('reflection_horizontal', False) or params.get('reflection_vertical', False):
+            active.append("Reflection")
+        
+        if active:
+            st.info(f"🔧 Active Transformations: {', '.join(active)}")
+        else:
+            st.info("ℹ️ No active transformations")
+    
+    else:
+        # Welcome screen
+        st.markdown("""
+        <div class="card">
+            <h3 style="margin: 0 0 1rem 0; color: #1e293b;">👆 Welcome to Matrix Transformation Studio</h3>
+            <p style="margin: 0 0 1rem 0; color: #64748b;">Upload an image to start transforming!</p>
+            <div style="background: #fef3c7; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                <strong>🔒 Security Notice:</strong><br>
+                • Maximum file size: 10MB<br>
+                • Maximum image size: 50MP (8000x8000)<br>
+                • Images are auto-resized for performance<br>
+                • All processing is done locally in your browser
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Feature info
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            st.markdown("""
+            <div class="card">
+                <h4 style="margin: 0 0 0.5rem 0; color: #667eea;">🔄 Translation</h4>
+                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Move objects along X and Y axes with pixel precision</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col2:
+            st.markdown("""
+            <div class="card">
+                <h4 style="margin: 0 0 0.5rem 0; color: #764ba2;">📏 Scaling</h4>
+                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Resize objects with independent X and Y scale factors</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col3:
+            st.markdown("""
+            <div class="card">
+                <h4 style="margin: 0 0 0.5rem 0; color: #667eea;">🔄 Rotation</h4>
+                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Rotate objects by any angle with smooth interpolation</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        col4, col5 = st.columns(2)
+        
+        with col4:
+            st.markdown("""
+            <div class="card">
+                <h4 style="margin: 0 0 0.5rem 0; color: #764ba2;">🔀 Shearing</h4>
+                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Apply skew transformations for artistic effects</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col5:
+            st.markdown("""
+            <div class="card">
+                <h4 style="margin: 0 0 0.5rem 0; color: #667eea;">🔁 Reflection</h4>
+                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Mirror objects horizontally and/or vertically</p>
+            </div>
+            """, unsafe_allow_html=True)
+
+def profile_page():
+    """Profile page with creator information"""
+    # Header
+    st.markdown("""
+    <div class="profile-header">
+        <h1 style="margin: 0; font-size: 2.5rem; font-weight: 700;">👨‍💻 Creator Profile</h1>
+        <p style="margin: 1rem 0 0 0; font-size: 1.25rem; opacity: 0.9;">Meet the Developer Behind Matrix Transformation Studio</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Profile section
+    col1, col2 = st.columns([1, 2])
+    
+    with col1:
+        st.markdown("""
+        <div class="profile-card">
+            <div style="text-align: center; margin-bottom: 1rem;">
+                <div style="width: 200px; height: 200px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+                    <div style="color: white; font-size: 4rem; font-weight: bold;">JD</div>
+                </div>
+            </div>
+            <h3 style="text-align: center; margin: 1rem 0 0.5rem 0; color: #1e293b;">John Doe</h3>
+            <p style="text-align: center; margin: 0; color: #64748b;">Full Stack Developer</p>
+            <p style="text-align: center; margin: 0.5rem 0; color: #64748b;">📍 Jakarta, Indonesia</p>
+            <div style="text-align: center; margin: 1rem 0;">
+                <a href="https://github.com/johndoe" target="_blank" style="margin: 0 0.5rem; text-decoration: none; color: #667eea;">🔗 GitHub</a>
+                <a href="https://linkedin.com/in/johndoe" target="_blank" style="margin: 0 0.5rem; text-decoration: none; color: #667eea;">💼 LinkedIn</a>
+                <a href="mailto:john.doe@example.com" style="margin: 0 0.5rem; text-decoration: none; color: #667eea;">📧 Email</a>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("""
+        <div class="profile-card">
+            <h3 style="margin: 0 0 1rem 0; color: #1e293b;">👋 About Me</h3>
+            <p style="margin: 0 0 1rem 0; color: #64748b; line-height: 1.6;">
+                Passionate full-stack developer with expertise in computer vision, image processing, and web development. 
+                Specialized in creating innovative solutions for digital image manipulation and transformation technologies.
+            </p>
+            
+            <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🎯 Areas of Expertise</h4>
+            <ul style="margin: 0 0 1rem 0; color: #64748b; line-height: 1.6;">
+                <li>Computer Vision & Image Processing</li>
+                <li>Matrix Transformations & Linear Algebra</li>
+                <li>Web Development (React, Next.js, Streamlit)</li>
+                <li>Python Programming & Data Science</li>
+                <li>Machine Learning & AI Applications</li>
+            </ul>
+            
+            <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🛠️ Technical Skills</h4>
+            <div style="margin: 0 0 1rem 0;">
+                <span style="display: inline-block; background: #667eea; color: white; padding: 0.25rem 0.5rem; border-radius: 15px; margin: 0.25rem; font-size: 0.8rem;">Python</span>
+                <span style="display: inline-block; background: #764ba2; color: white; padding: 0.25rem 0.5rem; border-radius: 15px; margin: 0.25rem; font-size: 0.8rem;">JavaScript</span>
+                <span style="display: inline-block; background: #667eea; color: white; padding: 0.25rem 0.5rem; border-radius: 15px; margin: 0.25rem; font-size: 0.8rem;">React</span>
+                <span style="display: inline-block; background: #764ba2; color: white; padding: 0.25rem 0.5rem; border-radius: 15px; margin: 0.25rem; font-size: 0.8rem;">Streamlit</span>
+                <span style="display: inline-block; background: #667eea; color: white; padding: 0.25rem 0.5rem; border-radius: 15px; margin: 0.25rem; font-size: 0.8rem;">OpenCV</span>
+                <span style="display: inline-block; background: #764ba2; color: white; padding: 0.25rem 0.5rem; border-radius: 15px; margin: 0.25rem; font-size: 0.8rem;">NumPy</span>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # Team section
+    st.markdown("""
+    <div class="team-card">
+        <h3 style="margin: 0 0 1rem 0; color: #1e293b;">👥 Development Team</h3>
+        <p style="margin: 0 0 1rem 0; color: #64748b;">Matrix Transformation Studio was developed by a dedicated team of computer vision enthusiasts and web developers.</p>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+            <div style="background: white; padding: 1rem; border-radius: 8px; border: 1px solid #e2e8f0;">
+                <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🎨 UI/UX Designer</h4>
+                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Created intuitive and beautiful user interface design</p>
+            </div>
+            <div style="background: white; padding: 1rem; border-radius: 8px; border: 1px solid #e2e8f0;">
+                <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🧮 Algorithm Developer</h4>
+                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Implemented advanced matrix transformation algorithms</p>
+            </div>
+            <div style="background: white; padding: 1rem; border-radius: 8px; border: 1px solid #e2e8f0;">
+                <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🔧 Backend Developer</h4>
+                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Built robust server-side processing system</p>
+            </div>
+            <div style="background: white; padding: 1rem; border-radius: 8px; border: 1px solid #e2e8f0;">
+                <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🧪 QA Tester</h4>
+                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Ensured quality and performance across all platforms</p>
+            </div>
         </div>
     </div>
     """, unsafe_allow_html=True)
     
-    # Matrix explanation
-    with st.expander("📖 Matrix Components Explanation"):
-        st.markdown("""
-        **3×3 Transformation Matrix Components:**
-        
-        | Component | Description | Formula |
-        |-----------|-------------|---------|
-        | **[0,0], [0,1], [1,0], [1,1]** | Linear transformation (rotation, scale, shear) | Combined from all transforms |
-        | **[0,2], [1,2]** | Translation (X, Y displacement) | `tx, ty` |
-        | **[2,0], [2,1]** | Perspective (unused in this implementation) | `0, 0` |
-        | **[2,2]** | Homogeneous coordinate | `1` |
-        
-        **Matrix Order:** Reflection → Scaling → Rotation → Shearing → Translation
-        """)
-
-def display_image_with_label(image: Image.Image, title: str, label: str = None):
-    """Display image dengan professional styling"""
-    try:
-        if image is None:
-            st.warning(f"No image to display for {title}")
-            return
-        
-        # Convert image to bytes for display
-        img_buffer = io.BytesIO()
-        image.save(img_buffer, format='PNG')
-        img_bytes = img_buffer.getvalue()
-        
-        # Create HTML with label
-        html_content = f"""
-        <div class="card">
-            <h3 style="margin: 0 0 1rem 0; color: #1e293b;">{title}</h3>
-            <div class="image-container">
-                {f'<div class="image-label">{label}</div>' if label else ''}
-                <img src="data:image/png;base64,{base64.b64encode(img_bytes).decode()}" 
-                     style="width: 100%; height: auto; display: block;">
-            </div>
-        </div>
-        """
-        
-        st.markdown(html_content, unsafe_allow_html=True)
-    except Exception as e:
-        st.error(f"❌ Error displaying image: {str(e)}")
-
-def create_preset_buttons(transformer, current_params):
-    """Create preset transformation buttons"""
-    presets = transformer.get_preset_transformations()
-    
+    # Contributions section
     st.markdown("""
-    <div class="card">
-        <h3 style="margin: 0 0 1rem 0; color: #1e293b;">⚡ Preset Transformations</h3>
-        <p style="margin: 0 0 1rem 0; color: #64748b;">Quick apply common transformations</p>
+    <div class="contribution-card">
+        <h3 style="margin: 0 0 1rem 0; color: #1e293b;">💝 My Contributions</h3>
+        
+        <div style="margin-bottom: 1.5rem;">
+            <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🔧 Core Development</h4>
+            <ul style="margin: 0 0 1rem 0; color: #64748b; line-height: 1.6;">
+                <li><strong>Matrix Transformation Engine:</strong> Developed robust 3x3 matrix transformation system supporting 5 types of transformations</li>
+                <li><strong>Image Processing Pipeline:</strong> Implemented efficient image processing with OpenCV and PIL integration</li>
+                <li><strong>Real-time Preview:</strong> Created live transformation preview with instant feedback</li>
+                <li><strong>Performance Optimization:</strong> Optimized for large images with auto-resizing and memory management</li>
+            </ul>
+        </div>
+        
+        <div style="margin-bottom: 1.5rem;">
+            <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🎨 User Interface Design</h4>
+            <ul style="margin: 0 0 1rem 0; color: #64748b; line-height: 1.6;">
+                <li><strong>Professional Design:</strong> Created modern, gradient-based UI with card-based layout</li>
+                <li><strong>Interactive Controls:</strong> Designed intuitive slider-based parameter controls</li>
+                <li><strong>Responsive Layout:</strong> Ensured compatibility across all devices and screen sizes</li>
+                <li><strong>Visual Feedback:</strong> Implemented real-time matrix visualization and transformation indicators</li>
+            </ul>
+        </div>
+        
+        <div style="margin-bottom: 1.5rem;">
+            <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🔒 Security & Performance</h4>
+            <ul style="margin: 0 0 1rem 0; color: #64748b; line-height: 1.6;">
+                <li><strong>Decompression Bomb Protection:</strong> Implemented protection against malicious large images</li>
+                <li><strong>Input Validation:</strong> Added comprehensive file size and dimension validation</li>
+                <li><strong>Error Handling:</strong> Created graceful error recovery and user-friendly messages</li>
+                <li><strong>Memory Management:</strong> Optimized memory usage for large image processing</li>
+            </ul>
+        </div>
+        
+        <div style="margin-bottom: 1.5rem;">
+            <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">📚 Documentation & Testing</h4>
+            <ul style="margin: 0 0 1rem 0; color: #64748b; line-height: 1.6;">
+                <li><strong>Comprehensive Documentation:</strong> Created detailed user guides and API documentation</li>
+                <li><strong>Unit Testing:</strong> Developed test suite for all transformation algorithms</li>
+                <li><strong>Performance Benchmarking:</strong> Optimized for speed and accuracy</li>
+                <li><strong>Multi-platform Support:</strong> Ensured compatibility across Windows, Mac, and Linux</li>
+            </ul>
+        </div>
+        
+        <div>
+            <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🚀 Innovation & Features</h4>
+            <ul style="margin: 0; color: #64748b; line-height: 1.6;">
+                <li><strong>Preset Transformations:</strong> Created 8 preset transformations for quick common operations</li>
+                <li><strong>Matrix Visualization:</strong> Implemented real-time 3x3 matrix display with explanations</li>
+                <li><strong>Export Functionality:</strong> Added high-quality image export in PNG format</li>
+                <li><strong>Multi-page Architecture:</strong> Built scalable multi-page application with profile section</li>
+            </ul>
+        </div>
+    </div>
     """, unsafe_allow_html=True)
     
-    # Create 4x2 grid for presets
-    cols = st.columns(4)
-    
-    for i, (name, params) in enumerate(presets.items()):
-        col = cols[i % 4]
+    # Contact section
+    st.markdown("""
+    <div class="profile-card">
+        <h3 style="margin: 0 0 1rem 0; color: #1e293b;">📬 Get In Touch</h3>
+        <p style="margin: 0 0 1rem 0; color: #64748b;">Feel free to reach out for collaborations, questions, or feedback about Matrix Transformation Studio!</p>
         
-        with col:
-            if st.button(f"**{name}**", key=f"preset_{i}", use_container_width=True):
-                # Update session state dengan preset values
-                for key, value in params.items():
-                    st.session_state[key] = value
-                st.rerun()
-    
-    st.markdown("</div>", unsafe_allow_html=True)
-
-def show_active_transformations(params):
-    """Show which transformations are active"""
-    active_transforms = []
-    
-    if params.get('translation_x', 0) != 0 or params.get('translation_y', 0) != 0:
-        active_transforms.append("🔄 Translation")
-    
-    if params.get('scaling_x', 1) != 1 or params.get('scaling_y', 1) != 1:
-        active_transforms.append("📏 Scaling")
-    
-    if params.get('rotation', 0) != 0:
-        active_transforms.append("🔄 Rotation")
-    
-    if params.get('shearing_x', 0) != 0 or params.get('shearing_y', 0) != 0:
-        active_transforms.append("🔀 Shearing")
-    
-    if params.get('reflection_horizontal', False) or params.get('reflection_vertical', False):
-        active_transforms.append("🔁 Reflection")
-    
-    if active_transforms:
-        st.markdown(f"""
-        <div class="info-message">
-            🔧 Active Transformations: {' • '.join(active_transforms)}
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <div style="text-align: center; padding: 1rem; background: #f8fafc; border-radius: 8px;">
+                <div style="font-size: 2rem; margin-bottom: 0.5rem;">📧</div>
+                <strong>Email:</strong><br>
+                <a href="mailto:john.doe@example.com" style="color: #667eea; text-decoration: none;">john.doe@example.com</a>
+            </div>
+            <div style="text-align: center; padding: 1rem; background: #f8fafc; border-radius: 8px;">
+                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔗</div>
+                <strong>GitHub:</strong><br>
+                <a href="https://github.com/johndoe" target="_blank" style="color: #667eea; text-decoration: none;">github.com/johndoe</a>
+            </div>
+            <div style="text-align: center; padding: 1rem; background: #f8fafc; border-radius: 8px;">
+                <div style="font-size: 2rem; margin-bottom: 0.5rem;">💼</div>
+                <strong>LinkedIn:</strong><br>
+                <a href="https://linkedin.com/in/johndoe" target="_blank" style="color: #667eea; text-decoration: none;">linkedin.com/in/johndoe</a>
+            </div>
+            <div style="text-align: center; padding: 1rem; background: #f8fafc; border-radius: 8px;">
+                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🌐</div>
+                <strong>Portfolio:</strong><br>
+                <a href="https://johndoe.dev" target="_blank" style="color: #667eea; text-decoration: none;">johndoe.dev</a>
+            </div>
         </div>
-        """, unsafe_allow_html=True)
-    else:
-        st.markdown("""
-        <div class="info-message">
-            ℹ️ No active transformations
-        </div>
-        """, unsafe_allow_html=True)
+    </div>
+    """, unsafe_allow_html=True)
 
 def main():
-    """Main application"""
-    try:
-        # Header
-        st.markdown("""
-        <div class="main-header">
-            <h1 style="margin: 0; font-size: 2.5rem; font-weight: 700;">Matrix Transformation Studio</h1>
-            <p style="margin: 1rem 0 0 0; font-size: 1.25rem; opacity: 0.9;">Advanced Image Processing with Matrix Operations</p>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        # Initialize transformer
-        transformer = SafeMatrixTransformer()
-        
-        # Sidebar
-        with st.sidebar:
-            st.markdown("""
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                        padding: 1.5rem; border-radius: 10px; margin-bottom: 1rem; text-align: center;">
-                <h3 style="margin: 0; color: white;">🎛️ Transformation Controls</h3>
-            </div>
-            """, unsafe_allow_html=True)
-            
-            # File upload dengan proteksi
-            uploaded_file = st.file_uploader(
-                "📤 Upload Image",
-                type=['png', 'jpg', 'jpeg', 'bmp', 'tiff'],
-                help="Upload an image to apply transformations (Max: 10MB, 50MP)"
-            )
-            
-            if uploaded_file is not None:
-                # Cek ukuran file
-                file_size = uploaded_file.size
-                max_file_size = 10 * 1024 * 1024  # 10MB
-                
-                if file_size > max_file_size:
-                    st.error(f"❌ File terlalu besar! ({file_size/1024/1024:.1f}MB)")
-                    st.info(f"💡 Maksimal: {max_file_size/1024/1024}MB")
-                else:
-                    if transformer.safe_load_image(uploaded_file):
-                        st.markdown('<div class="success-message">✅ Image loaded successfully!</div>', unsafe_allow_html=True)
-            
-            # Only show controls if image is loaded
-            if transformer.image is not None:
-                st.markdown("---")
-                
-                # Transformation tabs
-                tab1, tab2, tab3, tab4, tab5 = st.tabs([
-                    "🔄 Translation", "📏 Scaling", "🔄 Rotation", "🔀 Shearing", "🔁 Reflection"
-                ])
-                
-                with tab1:
-                    st.markdown("**Translation Parameters**")
-                    tx = st.slider("X Translation (pixels)", -200, 200, 0, key="translation_x")
-                    ty = st.slider("Y Translation (pixels)", -200, 200, 0, key="translation_y")
-                    st.caption(f"Current: X={tx}, Y={ty}")
-                
-                with tab2:
-                    st.markdown("**Scaling Parameters**")
-                    sx = st.slider("X Scale Factor", 0.1, 3.0, 1.0, 0.1, key="scaling_x")
-                    sy = st.slider("Y Scale Factor", 0.1, 3.0, 1.0, 0.1, key="scaling_y")
-                    st.caption(f"Current: X={sx:.1f}x, Y={sy:.1f}x")
-                
-                with tab3:
-                    st.markdown("**Rotation Parameters**")
-                    rotation = st.slider("Rotation Angle (degrees)", -180, 180, 0, key="rotation")
-                    st.caption(f"Current: {rotation}°")
-                
-                with tab4:
-                    st.markdown("**Shearing Parameters**")
-                    shear_x = st.slider("X Shear Factor", -1.0, 1.0, 0.0, 0.1, key="shearing_x")
-                    shear_y = st.slider("Y Shear Factor", -1.0, 1.0, 0.0, 0.1, key="shearing_y")
-                    st.caption(f"Current: X={shear_x:.1f}, Y={shear_y:.1f}")
-                
-                with tab5:
-                    st.markdown("**Reflection Parameters**")
-                    col1, col2 = st.columns(2)
-                    with col1:
-                        reflect_h = st.checkbox("Horizontal Reflection", key="reflection_horizontal")
-                    with col2:
-                        reflect_v = st.checkbox("Vertical Reflection", key="reflection_vertical")
-                    st.caption(f"Current: H={reflect_h}, V={reflect_v}")
-                
-                # Reset button
-                if st.button("🔄 Reset All", use_container_width=True):
-                    for key in list(st.session_state.keys()):
-                        if any(k in key for k in ['translation', 'scaling', 'rotation', 'shearing', 'reflection']):
-                            del st.session_state[key]
-                    st.rerun()
-        
-        # Main content
-        if transformer.image is not None:
-            # Get current parameters
-            params = {
-                'translation_x': st.session_state.get('translation_x', 0),
-                'translation_y': st.session_state.get('translation_y', 0),
-                'scaling_x': st.session_state.get('scaling_x', 1.0),
-                'scaling_y': st.session_state.get('scaling_y', 1.0),
-                'rotation': st.session_state.get('rotation', 0),
-                'shearing_x': st.session_state.get('shearing_x', 0.0),
-                'shearing_y': st.session_state.get('shearing_y', 0.0),
-                'reflection_horizontal': st.session_state.get('reflection_horizontal', False),
-                'reflection_vertical': st.session_state.get('reflection_vertical', False)
-            }
-            
-            # Create and apply transformation
-            matrix = transformer.create_transformation_matrix(params)
-            transformed_image = transformer.safe_apply_transformation(matrix)
-            
-            # Image comparison
-            col1, col2 = st.columns(2)
-            
-            with col1:
-                display_image_with_label(transformer.image, "📷 Original Image", "ORIGINAL")
-            
-            with col2:
-                display_image_with_label(transformed_image, "✨ Transformed Image", "TRANSFORMED")
-                
-                # Download button
-                if transformed_image is not None:
-                    img_buffer = io.BytesIO()
-                    transformed_image.save(img_buffer, format='PNG')
-                    img_buffer.seek(0)
-                    
-                    st.download_button(
-                        label="💾 Download Transformed Image",
-                        data=img_buffer,
-                        file_name="transformed_image.png",
-                        mime="image/png",
-                        use_container_width=True
-                    )
-            
-            # Matrix visualization
-            display_professional_matrix(matrix)
-            
-            # Preset transformations
-            create_preset_buttons(transformer, params)
-            
-            # Active transformations indicator
-            show_active_transformations(params)
-        
-        else:
-            # Welcome screen
-            st.markdown("""
-            <div class="card">
-                <h3 style="margin: 0 0 1rem 0; color: #1e293b;">👆 Welcome to Matrix Transformation Studio</h3>
-                <p style="margin: 0 0 1rem 0; color: #64748b;">Upload an image to start transforming!</p>
-                <div style="background: #fef3c7; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
-                    <strong>🔒 Security Notice:</strong><br>
-                    • Maximum file size: 10MB<br>
-                    • Maximum image size: 50MP (8000x8000)<br>
-                    • Images are auto-resized for performance<br>
-                    • All processing is done locally in your browser
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
-            
-            # Feature showcase
-            col1, col2, col3 = st.columns(3)
-            
-            with col1:
-                st.markdown("""
-                <div class="card">
-                    <h4 style="margin: 0 0 0.5rem 0; color: #667eea;">🔄 Translation</h4>
-                    <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Move objects along X and Y axes with pixel precision</p>
-                </div>
-                """, unsafe_allow_html=True)
-            
-            with col2:
-                st.markdown("""
-                <div class="card">
-                    <h4 style="margin: 0 0 0.5rem 0; color: #764ba2;">📏 Scaling</h4>
-                    <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Resize objects with independent X and Y scale factors</p>
-                </div>
-                """, unsafe_allow_html=True)
-            
-            with col3:
-                st.markdown("""
-                <div class="card">
-                    <h4 style="margin: 0 0 0.5rem 0; color: #667eea;">🔄 Rotation</h4>
-                    <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Rotate objects by any angle with smooth interpolation</p>
-                </div>
-                """, unsafe_allow_html=True)
-            
-            col4, col5 = st.columns(2)
-            
-            with col4:
-                st.markdown("""
-                <div class="card">
-                    <h4 style="margin: 0 0 0.5rem 0; color: #764ba2;">🔀 Shearing</h4>
-                    <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Apply skew transformations for artistic effects</p>
-                </div>
-                """, unsafe_allow_html=True)
-            
-            with col5:
-                st.markdown("""
-                <div class="card">
-                    <h4 style="margin: 0 0 0.5rem 0; color: #667eea;">🔁 Reflection</h4>
-                    <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Mirror objects horizontally and/or vertically</p>
-                </div>
-                """, unsafe_allow_html=True)
+    """Main application with multi-page navigation"""
+    # Page navigation
+    page = st.sidebar.selectbox(
+        "📄 Navigate to:",
+        ["🔄 Matrix Transformation Studio", "👨‍💻 Creator Profile"],
+        index=0,
+        format_func=lambda x: x.split(" ", 1)[1] if " " in x else x
+    )
     
-    except Exception as e:
-        st.error(f"❌ Application error: {str(e)}")
-        st.error("🔄 Please refresh the page and try again")
+    if page == "🔄 Matrix Transformation Studio":
+        main_app()
+    elif page == "👨‍💻 Creator Profile":
+        profile_page()
 
 if __name__ == "__main__":
     main()
