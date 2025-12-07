@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-🔄 Matrix Transformation Studio - Multi Page Version
+🔄 Matrix Transformation Studio - Multi Page Version (Fixed Profile Photo)
 Page 1: Main Application
-Page 2: Creator Profile - Yoseph Sihite dengan foto dari GitHub
+Page 2: Creator Profile - Yoseph Sihite dengan foto dari GitHub (FIXED)
 """
 
 import streamlit as st
@@ -247,45 +247,225 @@ st.markdown("""
         font-size: 3rem;
         color: #64748b;
     }
+    
+    /* Debug card styling */
+    .debug-card {
+        background: #fef2f2;
+        border: 2px solid #ef4444;
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin: 1rem 0;
+    }
+    
+    .debug-title {
+        color: #dc2626;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+    
+    .debug-info {
+        background: #f8fafc;
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 0.5rem 0;
+        font-family: monospace;
+        font-size: 0.9rem;
+    }
+    
+    .debug-url {
+        background: #f0f9ff;
+        border: 1px solid #0ea5e9;
+        border-radius: 8px;
+        padding: 0.75rem;
+        margin: 0.5rem 0;
+        word-break: break-all;
+    }
+    
+    .debug-step {
+        background: white;
+        border-left: 4px solid #0ea5e9;
+        padding: 0.75rem;
+        margin: 0.5rem 0;
+    }
 </style>
 """, unsafe_allow_html=True)
 
-def load_profile_photo():
-    """Load profile photo dari GitHub"""
+def load_profile_photo_with_debug():
+    """Load profile photo dari GitHub dengan debug info"""
+    debug_info = {
+        'github_username': 'yosephsihite',
+        'repo_name': 'matrix-transformation-studio',
+        'photo_filename': 'foto_yoseph.jpg',
+        'photo_url': '',
+        'url_tested': False,
+        'url_accessible': False,
+        'api_tested': False,
+        'api_accessible': False,
+        'error_message': '',
+        'suggestions': []
+    }
+    
     try:
-        # GitHub raw URL untuk foto
-        github_username = "yosephsihite"  # Ganti dengan username GitHub Anda
-        repo_name = "matrix-transformation-studio"  # Ganti dengan nama repo Anda
-        photo_filename = "foto_yoseph.jpg"
+        # GitHub configuration
+        github_username = debug_info['github_username']
+        repo_name = debug_info['repo_name']
+        photo_filename = debug_info['photo_filename']
         
-        # URL GitHub raw
+        # Construct GitHub raw URL
         photo_url = f"https://raw.githubusercontent.com/{github_username}/{repo_name}/main/{photo_filename}"
+        debug_info['photo_url'] = photo_url
         
-        # Download foto
-        response = requests.get(photo_url, timeout=10)
-        
-        if response.status_code == 200:
-            # Load image
-            image = Image.open(io.BytesIO(response.content))
+        # Test URL accessibility
+        try:
+            response = requests.get(photo_url, timeout=10)
+            debug_info['url_tested'] = True
+            debug_info['url_accessible'] = (response.status_code == 200)
             
-            # Resize untuk profil (200x200)
+            if response.status_code == 200:
+                # Load image
+                image = Image.open(io.BytesIO(response.content))
+                
+                # Resize untuk profil (200x200)
+                image = image.resize((200, 200), Image.Resampling.LANCZOS)
+                
+                # Convert to bytes untuk display
+                img_buffer = io.BytesIO()
+                image.save(img_buffer, format='JPEG')
+                img_bytes = img_buffer.getvalue()
+                
+                # Encode ke base64
+                img_base64 = base64.b64encode(img_bytes).decode()
+                
+                return img_base64, True, debug_info
+            else:
+                debug_info['error_message'] = f"HTTP {response.status_code}: {response.reason}"
+                
+                # Add specific suggestions based on status code
+                if response.status_code == 404:
+                    debug_info['suggestions'].append("File not found. Check if the photo file exists in the repository.")
+                    debug_info['suggestions'].append("Verify the filename matches exactly (case-sensitive).")
+                    debug_info['suggestions'].append("Ensure the file is in the 'main' branch, not 'master'.")
+                elif response.status_code == 403:
+                    debug_info['suggestions'].append("Access forbidden. Check if the repository is public.")
+                    debug_info['suggestions'].append("Verify your GitHub token has access to this repository.")
+                
+        except requests.exceptions.RequestException as e:
+            debug_info['error_message'] = f"Request error: {str(e)}"
+            debug_info['suggestions'].append("Check your internet connection.")
+            debug_info['suggestions'].append("Verify the GitHub URL is correct.")
+        
+        # Test GitHub API access
+        try:
+            api_url = f"https://api.github.com/repos/{github_username}/{repo_name}/contents/{photo_filename}"
+            api_response = requests.get(api_url, timeout=10)
+            debug_info['api_tested'] = True
+            debug_info['api_accessible'] = (api_response.status_code == 200)
+            
+            if api_response.status_code == 200:
+                debug_info['suggestions'].append("File exists in GitHub API but Raw URL failed.")
+                debug_info['suggestions'].append("This might be a temporary GitHub issue.")
+            else:
+                debug_info['suggestions'].append(f"GitHub API also returned {api_response.status_code}.")
+                
+        except requests.exceptions.RequestException as e:
+            debug_info['suggestions'].append(f"GitHub API test failed: {str(e)}")
+        
+        return None, False, debug_info
+        
+    except Exception as e:
+        debug_info['error_message'] = f"Unexpected error: {str(e)}"
+        debug_info['suggestions'].append("An unexpected error occurred while loading the photo.")
+        return None, False, debug_info
+
+def display_debug_info(debug_info):
+    """Display debug information for photo loading"""
+    st.markdown("""
+    <div class="debug-card">
+        <div class="debug-title">🔍 Photo Loading Debug Information</div>
+    """, unsafe_allow_html=True)
+    
+    # Configuration info
+    st.markdown("""
+    <div class="debug-info">
+        <strong>Configuration:</strong><br>
+        GitHub Username: {}<br>
+        Repository Name: {}<br>
+        Photo Filename: {}<br>
+    </div>
+    """.format(
+        debug_info['github_username'],
+        debug_info['repo_name'],
+        debug_info['photo_filename']
+    ), unsafe_allow_html=True)
+    
+    # URL info
+    st.markdown("""
+    <div class="debug-url">
+        <strong>Expected Photo URL:</strong><br>
+        <a href="{}" target="_blank">{}</a>
+    </div>
+    """.format(debug_info['photo_url'], debug_info['photo_url']), unsafe_allow_html=True)
+    
+    # Test results
+    url_status = "✅ Accessible" if debug_info['url_accessible'] else "❌ Not Accessible"
+    api_status = "✅ Accessible" if debug_info['api_accessible'] else "❌ Not Accessible"
+    
+    st.markdown(f"""
+    <div class="debug-info">
+        <strong>Test Results:</strong><br>
+        Raw URL Test: {url_status}<br>
+        GitHub API Test: {api_status}<br>
+        Error: {debug_info['error_message'] or 'None'}<br>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Suggestions
+    if debug_info['suggestions']:
+        st.markdown("""
+        <div class="debug-step">
+            <strong>Troubleshooting Steps:</strong>
+        """, unsafe_allow_html=True)
+        
+        for i, suggestion in enumerate(debug_info['suggestions'], 1):
+            st.markdown(f"""
+            <div class="debug-step">
+                {i}. {suggestion}
+            </div>
+            """, unsafe_allow_html=True)
+    
+    # Manual upload option
+    st.markdown("""
+    <div class="debug-step">
+        <strong>Alternative Solution:</strong><br>
+        Upload your photo directly using the file uploader below:
+    </div>
+    """, unsafe_allow_html=True)
+    
+    uploaded_photo = st.file_uploader(
+        "Upload Profile Photo",
+        type=['jpg', 'jpeg', 'png'],
+        key="profile_photo_upload"
+    )
+    
+    if uploaded_photo is not None:
+        try:
+            # Process uploaded photo
+            image = Image.open(uploaded_photo).convert('RGB')
             image = image.resize((200, 200), Image.Resampling.LANCZOS)
             
-            # Convert to bytes untuk display
+            # Convert to base64
             img_buffer = io.BytesIO()
             image.save(img_buffer, format='JPEG')
             img_bytes = img_buffer.getvalue()
-            
-            # Encode ke base64
             img_base64 = base64.b64encode(img_bytes).decode()
             
+            st.success("✅ Photo uploaded successfully!")
             return img_base64, True
-        else:
-            return None, False
-            
-    except Exception as e:
-        st.warning(f"⚠️ Tidak dapat memuat foto dari GitHub: {str(e)}")
-        return None, False
+        except Exception as e:
+            st.error(f"Error processing uploaded photo: {str(e)}")
+    
+    st.markdown("</div>", unsafe_allow_html=True)
+    return None, False
 
 class SafeMatrixTransformer:
     """Matrix Transformer dengan proteksi DecompressionBombError"""
@@ -812,7 +992,7 @@ def main_app():
             """, unsafe_allow_html=True)
 
 def profile_page():
-    """Profile page for Yoseph Sihite dengan foto dari GitHub"""
+    """Profile page for Yoseph Sihite dengan foto dari GitHub (FIXED)"""
     # Header
     st.markdown("""
     <div class="profile-header">
@@ -821,8 +1001,8 @@ def profile_page():
     </div>
     """, unsafe_allow_html=True)
     
-    # Load profile photo
-    photo_base64, photo_loaded = load_profile_photo()
+    # Load profile photo with debug info
+    photo_base64, photo_loaded, debug_info = load_profile_photo_with_debug()
     
     # Profile section
     col1, col2 = st.columns([1, 2])
@@ -908,6 +1088,17 @@ def profile_page():
         </p>
     </div>
     """, unsafe_allow_html=True)
+    
+    # Debug section for photo loading
+    if not photo_loaded:
+        with st.expander("🔍 Debug Photo Loading Issues"):
+            uploaded_photo_base64, uploaded_photo_loaded = display_debug_info(debug_info)
+            
+            # Update the profile photo if a new one was uploaded
+            if uploaded_photo_loaded and uploaded_photo_base64:
+                photo_base64 = uploaded_photo_base64
+                photo_loaded = True
+                st.rerun()
     
     # Team section
     st.markdown("""
