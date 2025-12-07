@@ -2,7 +2,7 @@
 """
 🔄 Matrix Transformation Studio - Multi Page Version
 Page 1: Main Application
-Page 2: Creator Profile
+Page 2: Creator Profile - Yoseph Sihite
 """
 
 import streamlit as st
@@ -195,6 +195,16 @@ st.markdown("""
         margin-bottom: 1rem;
         border: 1px solid #e2e8f0;
         border-left: 4px solid #667eea;
+    }
+    
+    .vision-card {
+        background: linear-gradient(135deg, #fef3c7 0%, #f59e0b 100%);
+        padding: 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 1rem;
+        border: 1px solid #f59e0b;
+        color: #92400e;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -724,12 +734,12 @@ def main_app():
             """, unsafe_allow_html=True)
 
 def profile_page():
-    """Profile page with creator information"""
+    """Profile page for Yoseph Sihite"""
     # Header
     st.markdown("""
     <div class="profile-header">
         <h1 style="margin: 0; font-size: 2.5rem; font-weight: 700;">👨‍💻 Creator Profile</h1>
-        <p style="margin: 1rem 0 0 0; font-size: 1.25rem; opacity: 0.9;">Meet the Developer Behind Matrix Transformation Studio</p>
+        <p style="margin: 1rem 0 0 0; font-size: 1.25rem; opacity: 0.9;">Yoseph Sihite - Linear Algebra Visionary</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -741,16 +751,15 @@ def profile_page():
         <div class="profile-card">
             <div style="text-align: center; margin-bottom: 1rem;">
                 <div style="width: 200px; height: 200px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0 auto; display: flex; align-items: center; justify-content: center;">
-                    <div style="color: white; font-size: 4rem; font-weight: bold;">JD</div>
+                    <div style="color: white; font-size: 4rem; font-weight: bold;">YS</div>
                 </div>
             </div>
-            <h3 style="text-align: center; margin: 1rem 0 0.5rem 0; color: #1e293b;">John Doe</h3>
-            <p style="text-align: center; margin: 0; color: #64748b;">Full Stack Developer</p>
+            <h3 style="text-align: center; margin: 1rem 0 0.5rem 0; color: #1e293b;">Yoseph Sihite</h3>
+            <p style="text-align: center; margin: 0; color: #64748b;">Computer Vision Developer</p>
             <p style="text-align: center; margin: 0.5rem 0; color: #64748b;">📍 Jakarta, Indonesia</p>
             <div style="text-align: center; margin: 1rem 0;">
-                <a href="https://github.com/johndoe" target="_blank" style="margin: 0 0.5rem; text-decoration: none; color: #667eea;">🔗 GitHub</a>
-                <a href="https://linkedin.com/in/johndoe" target="_blank" style="margin: 0 0.5rem; text-decoration: none; color: #667eea;">💼 LinkedIn</a>
-                <a href="mailto:john.doe@example.com" style="margin: 0 0.5rem; text-decoration: none; color: #667eea;">📧 Email</a>
+                <a href="https://github.com/yosephsihite" target="_blank" style="margin: 0 0.5rem; text-decoration: none; color: #667eea;">🔗 GitHub</a>
+                <a href="mailto:yoseph.sihite@example.com" style="margin: 0 0.5rem; text-decoration: none; color: #667eea;">📧 Email</a>
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -760,53 +769,72 @@ def profile_page():
         <div class="profile-card">
             <h3 style="margin: 0 0 1rem 0; color: #1e293b;">👋 About Me</h3>
             <p style="margin: 0 0 1rem 0; color: #64748b; line-height: 1.6;">
-                Passionate full-stack developer with expertise in computer vision, image processing, and web development. 
-                Specialized in creating innovative solutions for digital image manipulation and transformation technologies.
+                Passionate computer vision developer and linear algebra enthusiast with expertise in matrix transformations 
+                and image processing. Specialized in creating innovative solutions for digital image manipulation 
+                and developing educational tools that make complex mathematical concepts accessible to everyone.
             </p>
             
             <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🎯 Areas of Expertise</h4>
             <ul style="margin: 0 0 1rem 0; color: #64748b; line-height: 1.6;">
+                <li>Linear Algebra & Matrix Transformations</li>
                 <li>Computer Vision & Image Processing</li>
-                <li>Matrix Transformations & Linear Algebra</li>
-                <li>Web Development (React, Next.js, Streamlit)</li>
-                <li>Python Programming & Data Science</li>
-                <li>Machine Learning & AI Applications</li>
+                <li>Web Development (Python, Streamlit)</li>
+                <li>Mathematical Visualization</li>
+                <li>Educational Technology Development</li>
             </ul>
             
             <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🛠️ Technical Skills</h4>
             <div style="margin: 0 0 1rem 0;">
                 <span style="display: inline-block; background: #667eea; color: white; padding: 0.25rem 0.5rem; border-radius: 15px; margin: 0.25rem; font-size: 0.8rem;">Python</span>
-                <span style="display: inline-block; background: #764ba2; color: white; padding: 0.25rem 0.5rem; border-radius: 15px; margin: 0.25rem; font-size: 0.8rem;">JavaScript</span>
-                <span style="display: inline-block; background: #667eea; color: white; padding: 0.25rem 0.5rem; border-radius: 15px; margin: 0.25rem; font-size: 0.8rem;">React</span>
-                <span style="display: inline-block; background: #764ba2; color: white; padding: 0.25rem 0.5rem; border-radius: 15px; margin: 0.25rem; font-size: 0.8rem;">Streamlit</span>
-                <span style="display: inline-block; background: #667eea; color: white; padding: 0.25rem 0.5rem; border-radius: 15px; margin: 0.25rem; font-size: 0.8rem;">OpenCV</span>
                 <span style="display: inline-block; background: #764ba2; color: white; padding: 0.25rem 0.5rem; border-radius: 15px; margin: 0.25rem; font-size: 0.8rem;">NumPy</span>
+                <span style="display: inline-block; background: #667eea; color: white; padding: 0.25rem 0.5rem; border-radius: 15px; margin: 0.25rem; font-size: 0.8rem;">OpenCV</span>
+                <span style="display: inline-block; background: #764ba2; color: white; padding: 0.25rem 0.5rem; border-radius: 15px; margin: 0.25rem; font-size: 0.8rem;">Streamlit</span>
+                <span style="display: inline-block; background: #667eea; color: white; padding: 0.25rem 0.5rem; border-radius: 15px; margin: 0.25rem; font-size: 0.8rem;">PIL</span>
             </div>
         </div>
         """, unsafe_allow_html=True)
+    
+    # Vision section
+    st.markdown("""
+    <div class="vision-card">
+        <h3 style="margin: 0 0 1rem 0; color: #92400e;">🔭 My Vision</h3>
+        <p style="margin: 0 0 1rem 0; color: #92400e; line-height: 1.6;">
+            <strong>Membuat Kuisioner Linear Algebra:</strong> Saya percaya bahwa konsep-konsep aljabar linear 
+            yang kompleks dapat dibuat mudah dipahami melalui visualisasi interaktif. Matrix Transformation Studio 
+            adalah wujud dari visi saya untuk membuat transformasi matriks yang abstrak menjadi sesuatu yang 
+            dapat dilihat, dimanipulasi, dan dipahami oleh siapa saja.
+        </p>
+        <p style="margin: 0 0 1rem 0; color: #92400e; line-height: 1.6;">
+            <strong>Memberikan Kuisioner kepada Orang-Orang:</strong> Melalui aplikasi web ini, saya berbagi 
+            pengetahuan tentang transformasi matriks kepada orang banyak, dari mahasiswa hingga praktisi, 
+            dengan cara yang mudah diakses dan menarik. Setiap transformasi yang diterapkan adalah pembelajaran 
+            tentang bagaimana matematika dapat mengubah dunia visual kita.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
     
     # Team section
     st.markdown("""
     <div class="team-card">
         <h3 style="margin: 0 0 1rem 0; color: #1e293b;">👥 Development Team</h3>
-        <p style="margin: 0 0 1rem 0; color: #64748b;">Matrix Transformation Studio was developed by a dedicated team of computer vision enthusiasts and web developers.</p>
+        <p style="margin: 0 0 1rem 0; color: #64748b;">Matrix Transformation Studio dikembangkan oleh Group 2 Linear Algebra sebagai tugas akhir mata kuliah.</p>
         
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
             <div style="background: white; padding: 1rem; border-radius: 8px; border: 1px solid #e2e8f0;">
-                <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🎨 UI/UX Designer</h4>
-                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Created intuitive and beautiful user interface design</p>
+                <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🧮 Matematika & Algoritma</h4>
+                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Mengembangkan algoritma transformasi matriks dan validasi matematis</p>
             </div>
             <div style="background: white; padding: 1rem; border-radius: 8px; border: 1px solid #e2e8f0;">
-                <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🧮 Algorithm Developer</h4>
-                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Implemented advanced matrix transformation algorithms</p>
+                <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🎨 UI/UX Design</h4>
+                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Membuat antarmuka yang intuitif dan menarik</p>
             </div>
             <div style="background: white; padding: 1rem; border-radius: 8px; border: 1px solid #e2e8f0;">
-                <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🔧 Backend Developer</h4>
-                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Built robust server-side processing system</p>
+                <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🔧 Pengembangan Web</h4>
+                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Mengimplementasikan aplikasi dengan Streamlit</p>
             </div>
             <div style="background: white; padding: 1rem; border-radius: 8px; border: 1px solid #e2e8f0;">
-                <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🧪 QA Tester</h4>
-                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Ensured quality and performance across all platforms</p>
+                <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🧪 Testing & QA</h4>
+                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Memastikan kualitas dan performa aplikasi</p>
             </div>
         </div>
     </div>
@@ -818,52 +846,74 @@ def profile_page():
         <h3 style="margin: 0 0 1rem 0; color: #1e293b;">💝 My Contributions</h3>
         
         <div style="margin-bottom: 1.5rem;">
-            <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🔧 Core Development</h4>
+            <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🧮 Pengembangan Kuisioner</h4>
             <ul style="margin: 0 0 1rem 0; color: #64748b; line-height: 1.6;">
-                <li><strong>Matrix Transformation Engine:</strong> Developed robust 3x3 matrix transformation system supporting 5 types of transformations</li>
-                <li><strong>Image Processing Pipeline:</strong> Implemented efficient image processing with OpenCV and PIL integration</li>
-                <li><strong>Real-time Preview:</strong> Created live transformation preview with instant feedback</li>
-                <li><strong>Performance Optimization:</strong> Optimized for large images with auto-resizing and memory management</li>
+                <li><strong>Konsep Visualisasi:</strong> Mengubah konsep matriks abstrak menjadi visualisasi interaktif yang mudah dipahami</li>
+                <li><strong>Educational Design:</strong> Merancang alur pembelajaran dari konsep dasar hingga aplikasi kompleks</li>
+                <li><strong>Interactive Learning:</strong> Membuat pengalaman belajar yang interaktif dengan feedback real-time</li>
+                <li><strong>Mathematical Accuracy:</strong> Memastikan semua transformasi secara matematis benar dan konsisten</li>
             </ul>
         </div>
         
         <div style="margin-bottom: 1.5rem;">
-            <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🎨 User Interface Design</h4>
+            <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🔧 Implementasi Teknis</h4>
             <ul style="margin: 0 0 1rem 0; color: #64748b; line-height: 1.6;">
-                <li><strong>Professional Design:</strong> Created modern, gradient-based UI with card-based layout</li>
-                <li><strong>Interactive Controls:</strong> Designed intuitive slider-based parameter controls</li>
-                <li><strong>Responsive Layout:</strong> Ensured compatibility across all devices and screen sizes</li>
-                <li><strong>Visual Feedback:</strong> Implemented real-time matrix visualization and transformation indicators</li>
+                <li><strong>Matrix Transformation Engine:</strong> Mengembangkan sistem transformasi matriks 3x3 yang robust</li>
+                <li><strong>Image Processing Pipeline:</strong> Mengimplementasikan alur pemrosesan gambar yang efisien</li>
+                <li><strong>Real-time Preview:</strong> Membuat preview transformasi dengan feedback instan</li>
+                <li><strong>Performance Optimization:</strong> Mengoptimalkan untuk gambar besar dengan auto-resizing</li>
             </ul>
         </div>
         
         <div style="margin-bottom: 1.5rem;">
-            <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🔒 Security & Performance</h4>
+            <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🎨 Desain & User Experience</h4>
             <ul style="margin: 0 0 1rem 0; color: #64748b; line-height: 1.6;">
-                <li><strong>Decompression Bomb Protection:</strong> Implemented protection against malicious large images</li>
-                <li><strong>Input Validation:</strong> Added comprehensive file size and dimension validation</li>
-                <li><strong>Error Handling:</strong> Created graceful error recovery and user-friendly messages</li>
-                <li><strong>Memory Management:</strong> Optimized memory usage for large image processing</li>
+                <li><strong>Professional UI Design:</strong> Membuat antarmuka modern dengan gradient dan card-based layout</li>
+                <li><strong>Intuitive Controls:</strong> Merancang kontrol slider-based yang mudah digunakan</li>
+                <li><strong>Visual Feedback:</strong> Mengimplementasikan indikator transformasi dan visualisasi matriks</li>
+                <li><strong>Multi-page Architecture:</strong> Membangun arsitektur multi-page dengan profil pembuat</li>
             </ul>
         </div>
         
         <div style="margin-bottom: 1.5rem;">
-            <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">📚 Documentation & Testing</h4>
+            <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">📚 Dokumentasi & Edukasi</h4>
             <ul style="margin: 0 0 1rem 0; color: #64748b; line-height: 1.6;">
-                <li><strong>Comprehensive Documentation:</strong> Created detailed user guides and API documentation</li>
-                <li><strong>Unit Testing:</strong> Developed test suite for all transformation algorithms</li>
-                <li><strong>Performance Benchmarking:</strong> Optimized for speed and accuracy</li>
-                <li><strong>Multi-platform Support:</strong> Ensured compatibility across Windows, Mac, and Linux</li>
+                <li><strong>Comprehensive Documentation:</strong> Membuat dokumentasi lengkap untuk pengguna dan pengembang</li>
+                <li><strong>Educational Content:</strong> Menulis penjelasan konsep matriks dengan bahasa yang mudah dipahami</li>
+                <li><strong>Mathematical Explanations:</strong> Memberikan penjelasan rinci tentang komponen matriks</li>
+                <li><strong>Use Cases & Examples:</strong> Menyediakan contoh nyata penggunaan transformasi matriks</li>
             </ul>
         </div>
         
         <div>
-            <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🚀 Innovation & Features</h4>
+            <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🚀 Inovasi & Fitur</h4>
             <ul style="margin: 0; color: #64748b; line-height: 1.6;">
-                <li><strong>Preset Transformations:</strong> Created 8 preset transformations for quick common operations</li>
-                <li><strong>Matrix Visualization:</strong> Implemented real-time 3x3 matrix display with explanations</li>
-                <li><strong>Export Functionality:</strong> Added high-quality image export in PNG format</li>
-                <li><strong>Multi-page Architecture:</strong> Built scalable multi-page application with profile section</li>
+                <li><strong>Preset Transformations:</strong> Membuat 8 preset transformasi untuk operasi umum</li>
+                <li><strong>Matrix Visualization:</strong> Mengimplementasikan visualisasi matriks 3x3 real-time</li>
+                <li><strong>Export Functionality:</strong> Menambahkan export gambar berkualitas tinggi</li>
+                <li><strong>Security Features:</strong> Mengimplementasikan proteksi terhadap gambar berbahaya</li>
+            </ul>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Academic context section
+    st.markdown("""
+    <div class="profile-card">
+        <h3 style="margin: 0 0 1rem 0; color: #1e293b;">🎓 Konteks Akademik</h3>
+        <p style="margin: 0 0 1rem 0; color: #64748b; line-height: 1.6;">
+            <strong>Matrix Transformation Studio</strong> dikembangkan sebagai <strong>Tugas Akhir Mata Kuliah Linear Algebra</strong> 
+            untuk Group 2. Aplikasi ini mengimplementasikan konsep-konsep fundamental aljabar linear dalam bentuk 
+            aplikasi web yang interaktif dan edukatif.
+        </p>
+        
+        <div style="background: #f8fafc; padding: 1rem; border-radius: 8px; margin: 1rem 0; border-left: 4px solid #667eea;">
+            <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">📖 Tujuan Pembelajaran:</h4>
+            <ul style="margin: 0; color: #64748b; line-height: 1.6;">
+                <li>Mengimplementasikan transformasi matriks dalam aplikasi nyata</li>
+                <li>Memvisualisasikan konsep abstrak aljabar linear</li>
+                <li>Menghubungkan teori matematika dengan aplikasi praktis</li>
+                <li>Membuat alat pembelajaran yang dapat diakses oleh siapa saja</li>
             </ul>
         </div>
     </div>
@@ -872,29 +922,24 @@ def profile_page():
     # Contact section
     st.markdown("""
     <div class="profile-card">
-        <h3 style="margin: 0 0 1rem 0; color: #1e293b;">📬 Get In Touch</h3>
-        <p style="margin: 0 0 1rem 0; color: #64748b;">Feel free to reach out for collaborations, questions, or feedback about Matrix Transformation Studio!</p>
+        <h3 style="margin: 0 0 1rem 0; color: #1e293b;">📬 Hubungi Saya</h3>
+        <p style="margin: 0 0 1rem 0; color: #64748b;">Jangan ragu untuk menghubungi saya untuk kolaborasi, pertanyaan, atau feedback tentang Matrix Transformation Studio!</p>
         
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
             <div style="text-align: center; padding: 1rem; background: #f8fafc; border-radius: 8px;">
                 <div style="font-size: 2rem; margin-bottom: 0.5rem;">📧</div>
                 <strong>Email:</strong><br>
-                <a href="mailto:john.doe@example.com" style="color: #667eea; text-decoration: none;">john.doe@example.com</a>
+                <a href="mailto:yoseph.sihite@example.com" style="color: #667eea; text-decoration: none;">yoseph.sihite@example.com</a>
             </div>
             <div style="text-align: center; padding: 1rem; background: #f8fafc; border-radius: 8px;">
                 <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔗</div>
                 <strong>GitHub:</strong><br>
-                <a href="https://github.com/johndoe" target="_blank" style="color: #667eea; text-decoration: none;">github.com/johndoe</a>
+                <a href="https://github.com/yosephsihite" target="_blank" style="color: #667eea; text-decoration: none;">github.com/yosephsihite</a>
             </div>
             <div style="text-align: center; padding: 1rem; background: #f8fafc; border-radius: 8px;">
-                <div style="font-size: 2rem; margin-bottom: 0.5rem;">💼</div>
-                <strong>LinkedIn:</strong><br>
-                <a href="https://linkedin.com/in/johndoe" target="_blank" style="color: #667eea; text-decoration: none;">linkedin.com/in/johndoe</a>
-            </div>
-            <div style="text-align: center; padding: 1rem; background: #f8fafc; border-radius: 8px;">
-                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🌐</div>
-                <strong>Portfolio:</strong><br>
-                <a href="https://johndoe.dev" target="_blank" style="color: #667eea; text-decoration: none;">johndoe.dev</a>
+                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎓</div>
+                <strong>Academic:</strong><br>
+                <span style="color: #64748b;">Linear Algebra - Group 2</span>
             </div>
         </div>
     </div>
