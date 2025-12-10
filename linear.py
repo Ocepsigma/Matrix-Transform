@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-🔄 Matrix Transformation Studio - Final Version
+🔄 Matrix Transformation Studio - Final Version (Simple & Stable)
 Page 1: Main Application
 Page 2: Creator Profile - Yoseph Sihite
 """
@@ -682,9 +682,9 @@ def main_app():
             
             | Component | Description | Formula |
             |-----------|-------------|---------|
-            | **[0,0], [0,1], [1,0], [1,1]** | Linear transformation (rotation, scale, shear) | Combined from all transforms |
-            | **[0,2], [1,2]** | Translation (X, Y displacement) | `tx, ty` |
-            | **[2,0], [2,1]** | Perspective (unused in this implementation) | `0, 0` |
+            | **[0,0], [0,1], [1,0], [1,1]] | Linear transformation (rotation, scale, shear) | Combined from all transforms |
+            | **[0,2], [1,2]] | Translation (X, Y displacement) | `tx, ty` |
+            | **[2,0], [2,1]] | Perspective (unused in this implementation) | `0, 0` |
             | **[2,2]** | Homogeneous coordinate | `1` |
             
             **Matrix Order:** Reflection → Scaling → Rotation → Shearing → Translation
@@ -800,9 +800,8 @@ def profile_page():
                 <div class="photo-loading">
                     ⏳
                 </div>
-                <p style="text-align: center; margin-top: 0.5rem; color: #64748b; font-size: 0.9rem;">
-                    Loading photo from GitHub...
-                </p>
+                <p style="text-align: center; margin-top: 0.5rem; color: #64748b; font-size: 0.9rem;">Loading photo from GitHub...</p>
+            </div>
             """, unsafe_allow_html=True)
         
         st.markdown("""
@@ -811,79 +810,119 @@ def profile_page():
             <p style="text-align: center; margin: 0; color: #64748b;">Computer Vision Developer</p>
             <p style="text-align: center; margin: 0.5rem 0; color: #64748b;">📍 Jakarta, Indonesia</p>
             <div style="text-align: center; margin: 1rem 0;">
-                <a href="https://github.com/yosephsihite" target="_blank" style="margin: 0 0.5rem; text-decoration: none; color: #667eea;">🔗 GitHub</a>
-                <a href="mailto:yoseph.sihite@example.com" style="margin: 0 0.5rem; text-decoration: none; color: #667eea;">📧 Email</a>
+                <a href="https://github.com/yosephsihite" target="_blank" style="margin: 0 0.5rem 0; text-decoration: none; color: #667eea;">🔗 GitHub</a>
+                <a href="mailto:yoseph.sihite@example.com" style="margin: 0 0.5rem 0; text-decoration: none; color: #667eea;">📧 Email</a>
             </div>
         </div>
         """, unsafe_allow_html=True)
     
     with col2:
+        # Development Team Section
         st.markdown("""
-<div class="team-card" style="margin-top: 1rem;">
-
-    <h3 style="margin-bottom: 1.5rem; color: #1e293b;">👨‍💻 Development Team</h3>
-
-    <!-- Lead Developer Card -->
-    <div style="background: white; padding: 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 1.5rem;">
-        <h4 style="margin-bottom: 1rem; color: #1e293b;">👤 Lead Developer</h4>
-
-        <p style="margin: 0 0 0.5rem 0; font-size: 1.1rem; font-weight: 600; color: #1e293b;">
-            <strong>Nama:</strong> Yoseph Sihite
-        </p>
-        <p style="margin: 0 0 0.5rem 0; color: #64748b;">
-            <strong>Student ID:</strong> 004202400113
-        </p>
-        <p style="margin: 0 0 0.5rem 0; color: #64748b;">
-            <strong>Group:</strong> Group 2 Linear Algebra
-        </p>
-        <p style="margin: 0; color: #64748b;">
-            <strong>Role:</strong> Lead Developer & Linear Algebra Specialist
-        </p>
-    </div>
-
-    <!-- Project Overview -->
-    <div style="background: linear-gradient(135deg, #fef3c7, #f59e0b); padding: 1.5rem; border-radius: 12px; border: 1px solid #f59e0b; color: #92400e; margin-bottom: 1.5rem;">
-        <h4 style="margin-bottom: 1rem;">🎯 Project Overview</h4>
-
-        <p style="line-height: 1.7;">
-            Yoseph Sihite (SID: 004202400113) merupakan mahasiswa dari Group 2 Linear Algebra dan pengembang aplikasi
-            <strong>Matrix Transformation Studio</strong>. Aplikasi ini dikembangkan sebagai final project mata kuliah
-            Linear Algebra dengan tujuan memvisualisasikan konsep transformasi matriks melalui pendekatan interaktif berbasis web.
-        </p>
-
-        <h4 style="margin: 1.2rem 0 0.5rem;">💪 Kontribusi</h4>
-
-        <p style="line-height: 1.7;">
-            Seluruh proses pengembangan proyek ini dikerjakan secara mandiri, mulai dari perancangan konsep,
-            pengembangan algoritma transformasi matriks, hingga implementasi konsep aljabar linear ke dalam sistem visual interaktif.
-            Pengembangan web app, termasuk desain antarmuka, logika aplikasi, dan pengujian fungsionalitas,
-            sepenuhnya diselesaikan secara individual karena tidak adanya anggota lain dalam Group 2.
-        </p>
-
-        <div style="background: rgba(255,255,255,0.35); padding: 1rem; border-radius: 10px; margin-top: 1rem;">
-            <h5 style="margin-bottom: 0.5rem;">🔧 Key Technical Contributions</h5>
-            <ul style="margin: 0; padding-left: 1.2rem; line-height: 1.7;">
-                <li><strong>Matrix Transformation Engine:</strong> 3×3 matrix transformation system</li>
-                <li><strong>Interactive Web Application:</strong> Streamlit-based real-time visualization</li>
-                <li><strong>Mathematical Implementation:</strong> Visual representation of abstract linear algebra</li>
-                <li><strong>Performance Optimization:</strong> Efficient and smooth processing</li>
-                <li><strong>Educational Design:</strong> Intuitive controls for learning purposes</li>
-            </ul>
+        <div class="team-card">
+            <h3 style="margin: 0 0 1rem 0; color: #1e293b;">👨‍💻 Development Team</h3>
+            
+            <div style="background: white; padding: 1.5rem; border-radius: 10px; border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+                <h4 style="margin: 0 0 1rem 0; color: #1e293b;">👤 Lead Developer</h4>
+                <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                    <div style="flex: 1;">
+                        <p style="margin: 0 0 0.5rem 0; color: #1e293b; font-size: 1.1rem; font-weight: 600;">
+                            <strong>Nama:</strong> Yoseph Sihite
+                        </p>
+                        <p style="margin: 0 0 0.5rem 0; color: #64748b;">
+                            <strong>Student ID:</strong> 004202400113
+                        </p>
+                        <p style="margin: 0 0 0.5rem 0; color: #64748b;">
+                            <strong>Group:</strong> Group 2 Linear Algebra
+                        </p>
+                        <p style="margin: 0 0 0.5rem 0; color: #64748b;">
+                            <strong>Role:</strong> Lead Developer & Linear Algebra Specialist
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, #fef3c7 0%, #f59e0b 100%); padding: 1.5rem; border-radius: 10px; border: 1px solid #f59e0b; color: #92400e; margin-bottom: 1rem;">
+                <h4 style="margin: 0 0 1rem 0; color: #92400e;">🎯 Project Overview</h4>
+                <p style="margin: 0 0 1rem 0; color: #92400e; line-height: 1.6;">
+                    <strong>Matrix Transformation Studio</strong> adalah aplikasi web interaktif yang dikembangkan sebagai 
+                    <strong>Final Project Mata Kuliah Linear Algebra</strong>. Aplikasi ini dirancang untuk 
+                    <strong>memvisualisasikan konsep transformasi matriks</strong> agar lebih mudah dipahami 
+                    melalui pendekatan visualisasi berbasis web.
+                </p>
+                
+                <h4 style="margin: 0 0 1rem 0; color: #92400e;">💪 Kontribusi</h4>
+                <p style="margin: 0 0 1rem 0; color: #92400e; line-height: 1.6;">
+                    <strong>Seluruh proses pengembangan proyek ini dikerjakan secara mandiri</strong> oleh Yoseph Sihite. 
+                    Kontribusi yang dilakukan mencakup perancangan konsep dan arsitektur aplikasi, 
+                    pengembangan algoritma transformasi matriks, serta implementasi konsep aljabar linear ke dalam sistem visual interaktif. Selain itu, 
+                    pengembangan web app, termasuk desain antarmuka pengguna, pengelolaan logika aplikasi, dan pengujian fungsionalitas, sepenuhnya diselesaikan 
+                    secara individual karena tidak adanya anggota lain dalam Group 2.
+                </p>
+                
+                <div style="background: rgba(255, 255, 255, 0.3); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                    <h5 style="margin: 0 0 0.5rem 0; color: #92400e;">🔧 Kontribusi Utama:</h5>
+                    <ul style="margin: 0 0 1rem 0; color: #92400e; line-height: 1.6;">
+                        <li><strong>Perancangan Konsep & Arsitektur Aplikasi:</strong> Merancang struktur aplikasi yang efisien dan user-friendly</li>
+                        <li><strong>Pengembangan Algoritma Transformasi Matriks:</strong> Implementasi algoritma matriks 3×3 untuk transformasi 2D</li>
+                        <li><strong>Implementasi Konsep Aljabar Linear:</strong> Mengubah konsep matematis abstrak menjadi visualisasi interaktif</li>
+                        <li><strong>Pengembangan Web Application:</strong> Membangun antarmuka pengguna dengan Streamlit</li>
+                        <li><strong>Desain Antarmuka Pengguna:</strong> Menciptakan UI yang intuitif dan menarik</li>
+                        <li><strong>Pengelolaan Logika Aplikasi:</strong> Implementasi backend untuk pemrosesan gambar</li>
+                        <li><strong>Pengujian Fungsionalitas:</strong> Testing dan debugging fitur aplikasi</li>
+                    </ul>
+                    
+                    <h5 style="margin: 0 0 0.5rem 0; color: #92400e;">🔧 Teknologi yang Digunakan:</h5>
+                    <ul style="margin: 0 0 1rem 0; color: #92400e; line-height: 1.6;">
+                        <li><strong>Frontend:</strong> Streamlit (Python Web Framework), HTML/CSS (Styling & Layout), JavaScript (Interaktivitas & Validasi)</li>
+                        <li><strong>Backend:</strong> Python (Bahasa Pemrograman Utama), NumPy (Operasi Matriks & Perhitungan Matematis), Pillow/PIL (Pemrosesan Gambar & Transformasi), Matplotlib (Visualisasi Matriks & Grafik)</li>
+                        <li><strong>Design Tools:</strong> Gradient Styling (Desain Modern), Card-based Layout (Tata Letak Kartu), Responsive Design (Beradaptasi di Berbagai Perangkat)</li>
+                    </ul>
+                    
+                    <h5 style="margin: 0 0 0.5rem 0; color: #92400e;">🎓 Prestasi Akademik:</h5>
+                    <p style="margin: 0 0 1rem 0; color: #92400e; line-height: 1.6;">
+                        Proyek ini <strong>menunjukkan pemahaman komprehensif konsep aljabar linear</strong> dan 
+                        <strong>kemampuan mengimplementasikan teori matematis</strong> dalam aplikasi praktis. 
+                        Aplikasi berhasil 
+                        <strong>mengubah konsep abstrak menjadi alat pembelajaran visual yang interaktif</strong> dan 
+                        <strong>dapat digunakan sebagai demonstrasi dalam pengajaran matematika</strong>.
+                    </p>
+                </div>
+            </div>
         </div>
-    </div>
-
-    <!-- Academic Achievement -->
-    <div style="background: #f8fafc; padding: 1.2rem; border-radius: 10px; border-left: 4px solid #667eea;">
-        <h4 style="margin-bottom: 0.5rem; color: #1e293b;">🎓 Academic Achievement</h4>
-        <p style="margin: 0; color: #64748b; line-height: 1.7;">
-            Proyek independen ini menunjukkan pemahaman menyeluruh terhadap konsep aljabar linear
-            serta penerapannya dalam visualisasi matematis dan pengembangan aplikasi edukatif berbasis web.
-        </p>
-    </div>
-
-</div>
-""", unsafe_allow_html=True)
-
+        """, unsafe_allow_html=True)
+    
+    # Contact section
+    st.markdown("""
+        <div class="profile-card">
+            <h3 style="margin: 0 0 1rem 0; color: #1e293b;">📬 Hubungi Saya</h3>
+            <p style="margin: 0 0 1rem 0; color: #64748b;">Jangan ragu untuk menghubungi saya untuk kolaborasi, pertanyaan, atau feedback tentang Matrix Transformation Studio!</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                <div style="text-align: center; padding: 1rem; background: #f8fafc; border-radius: 8px;">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">📧</div>
+                    <strong>Email:</strong><br>
+                    <a href="mailto:yoseph.sihite@example.com" style="color: #667eea; text-decoration: none;">yoseph.sihite@example.com</a>
+                </div>
+                <div style="text-align: center; padding: 1rem; background: #f8fafc; border-radius: 8px;">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔗</div>
+                    <strong>GitHub:</strong><br>
+                    <a href="https://github.com/yosephsihite" target="_blank" style="color: #667eea; text-decoration: none;">github.com/yosephsihite</a>
+                </div>
+                <div style="text-align: center; padding: 1rem; background: #f8fafc; border-radius: 8px;">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">💼</div>
+                    <strong>LinkedIn:</strong><br>
+                    <a href="https://linkedin.com/in/yosephsihite" target="_blank" style="color: #667eea; text-decoration: none;">linkedin.com/in/yosephsihite</a>
+                </div>
+                <div style="text-align: center; padding: 1rem; background: #f8fafc; border-radius: 8px;">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎓</div>
+                    <strong>Academic:</strong><br>
+                    <span style="color: #64748b;">Linear Algebra - Group 2</span>
+                </div>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
 def main():
     """Main application with multi-page navigation"""
@@ -902,5 +941,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
