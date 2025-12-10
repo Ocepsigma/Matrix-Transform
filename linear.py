@@ -819,67 +819,71 @@ def profile_page():
     
     with col2:
         st.markdown("""
-        <div class="team-card">
-            <h3 style="margin: 0 0 1rem 0; color: #1e293b;">👨‍💻 Development Team</h3>
-            
-            <div style="background: white; padding: 1.5rem; border-radius: 10px; border: 1px solid #e2e8f0; margin-bottom: 1rem;">
-                <h4 style="margin: 0 0 1rem 0; color: #1e293b;">👤 Lead Developer</h4>
-                <div style="display: flex; align-items: center; margin-bottom: 1rem;">
-                    <div style="flex: 1;">
-                        <p style="margin: 0 0 0.5rem 0; color: #1e293b; font-size: 1.1rem; font-weight: 600;">
-                            <strong>Nama:</strong> Yoseph Sihite
-                        </p>
-                        <p style="margin: 0 0 0.5rem 0; color: #64748b;">
-                            <strong>Student ID:</strong> 004202400113
-                        </p>
-                        <p style="margin: 0 0 0.5rem 0; color: #64748b;">
-                            <strong>Group:</strong> Group 2 Linear Algebra
-                        </p>
-                        <p style="margin: 0 0 0.5rem 0; color: #64748b;">
-                            <strong>Role:</strong> Lead Developer & Linear Algebra Specialist
-                        </p>
-                    </div>
-                </div>
-            </div>
-            
-            <div style="background: linear-gradient(135deg, #fef3c7 0%, #f59e0b 100%); padding: 1.5rem; border-radius: 10px; border: 1px solid #f59e0b; color: #92400e; margin-bottom: 1rem;">
-                <h4 style="margin: 0 0 1rem 0; color: #92400e;">🎯 Project Overview</h4>
-                <p style="margin: 0 0 1rem 0; color: #92400e; line-height: 1.6;">
-                    Yoseph Sihite (SID: 004202400113) merupakan mahasiswa dari Group 2 Linear Algebra dan pengembang aplikasi Matrix Transformation Studio. 
-                    Aplikasi ini dikembangkan sebagai final project mata kuliah Linear Algebra, dengan tujuan memvisualisasikan konsep transformasi matriks 
-                    agar lebih mudah dipahami melalui pendekatan interaktif berbasis web.
-                </p>
-                
-                <h4 style="margin: 0 0 1rem 0; color: #92400e;">💪 Kontribusi</h4>
-                <p style="margin: 0 0 1rem 0; color: #92400e; line-height: 1.6;">
-                    Seluruh proses pengembangan proyek ini dikerjakan secara mandiri. Kontribusi yang dilakukan mencakup perancangan konsep dan arsitektur aplikasi, 
-                    pengembangan algoritma transformasi matriks, serta implementasi konsep aljabar linear ke dalam sistem visual interaktif. Selain itu, 
-                    pengembangan web app, termasuk desain antarmuka pengguna, pengelolaan logika aplikasi, dan pengujian fungsionalitas, sepenuhnya diselesaikan 
-                    secara individual karena tidak adanya anggota lain dalam Group 2.
-                </p>
-                
-                <div style="background: rgba(255, 255, 255, 0.3); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
-                    <h5 style="margin: 0 0 0.5rem 0; color: #92400e;">🔧 Key Technical Contributions:</h5>
-                    <ul style="margin: 0; color: #92400e; line-height: 1.6;">
-                        <li><strong>Matrix Transformation Engine:</strong> Developed complete 3×3 matrix transformation system</li>
-                        <li><strong>Interactive Web Application:</strong> Built user-friendly Streamlit interface with real-time preview</li>
-                        <li><strong>Mathematical Implementation:</strong> Transformed abstract linear algebra concepts into visual demonstrations</li>
-                        <li><strong>Performance Optimization:</strong> Optimized algorithms for smooth image processing</li>
-                        <li><strong>Educational Design:</strong> Created intuitive controls for exploring mathematical concepts</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div style="background: #f8fafc; padding: 1rem; border-radius: 8px; margin: 1rem 0; border-left: 4px solid #667eea;">
-                <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">🎓 Academic Achievement</h4>
-                <p style="margin: 0; color: #64748b; line-height: 1.6;">
-                    This independent project demonstrates comprehensive understanding of linear algebra concepts and their practical applications 
-                    in computer vision and image processing. The successful implementation showcases both theoretical knowledge and 
-                    technical programming skills in creating educational tools for mathematical visualization.
-                </p>
-            </div>
+<div class="team-card" style="margin-top: 1rem;">
+
+    <h3 style="margin-bottom: 1.5rem; color: #1e293b;">👨‍💻 Development Team</h3>
+
+    <!-- Lead Developer Card -->
+    <div style="background: white; padding: 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 1.5rem;">
+        <h4 style="margin-bottom: 1rem; color: #1e293b;">👤 Lead Developer</h4>
+
+        <p style="margin: 0 0 0.5rem 0; font-size: 1.1rem; font-weight: 600; color: #1e293b;">
+            <strong>Nama:</strong> Yoseph Sihite
+        </p>
+        <p style="margin: 0 0 0.5rem 0; color: #64748b;">
+            <strong>Student ID:</strong> 004202400113
+        </p>
+        <p style="margin: 0 0 0.5rem 0; color: #64748b;">
+            <strong>Group:</strong> Group 2 Linear Algebra
+        </p>
+        <p style="margin: 0; color: #64748b;">
+            <strong>Role:</strong> Lead Developer & Linear Algebra Specialist
+        </p>
+    </div>
+
+    <!-- Project Overview -->
+    <div style="background: linear-gradient(135deg, #fef3c7, #f59e0b); padding: 1.5rem; border-radius: 12px; border: 1px solid #f59e0b; color: #92400e; margin-bottom: 1.5rem;">
+        <h4 style="margin-bottom: 1rem;">🎯 Project Overview</h4>
+
+        <p style="line-height: 1.7;">
+            Yoseph Sihite (SID: 004202400113) merupakan mahasiswa dari Group 2 Linear Algebra dan pengembang aplikasi
+            <strong>Matrix Transformation Studio</strong>. Aplikasi ini dikembangkan sebagai final project mata kuliah
+            Linear Algebra dengan tujuan memvisualisasikan konsep transformasi matriks melalui pendekatan interaktif berbasis web.
+        </p>
+
+        <h4 style="margin: 1.2rem 0 0.5rem;">💪 Kontribusi</h4>
+
+        <p style="line-height: 1.7;">
+            Seluruh proses pengembangan proyek ini dikerjakan secara mandiri, mulai dari perancangan konsep,
+            pengembangan algoritma transformasi matriks, hingga implementasi konsep aljabar linear ke dalam sistem visual interaktif.
+            Pengembangan web app, termasuk desain antarmuka, logika aplikasi, dan pengujian fungsionalitas,
+            sepenuhnya diselesaikan secara individual karena tidak adanya anggota lain dalam Group 2.
+        </p>
+
+        <div style="background: rgba(255,255,255,0.35); padding: 1rem; border-radius: 10px; margin-top: 1rem;">
+            <h5 style="margin-bottom: 0.5rem;">🔧 Key Technical Contributions</h5>
+            <ul style="margin: 0; padding-left: 1.2rem; line-height: 1.7;">
+                <li><strong>Matrix Transformation Engine:</strong> 3×3 matrix transformation system</li>
+                <li><strong>Interactive Web Application:</strong> Streamlit-based real-time visualization</li>
+                <li><strong>Mathematical Implementation:</strong> Visual representation of abstract linear algebra</li>
+                <li><strong>Performance Optimization:</strong> Efficient and smooth processing</li>
+                <li><strong>Educational Design:</strong> Intuitive controls for learning purposes</li>
+            </ul>
         </div>
-        """, unsafe_allow_html=True)
+    </div>
+
+    <!-- Academic Achievement -->
+    <div style="background: #f8fafc; padding: 1.2rem; border-radius: 10px; border-left: 4px solid #667eea;">
+        <h4 style="margin-bottom: 0.5rem; color: #1e293b;">🎓 Academic Achievement</h4>
+        <p style="margin: 0; color: #64748b; line-height: 1.7;">
+            Proyek independen ini menunjukkan pemahaman menyeluruh terhadap konsep aljabar linear
+            serta penerapannya dalam visualisasi matematis dan pengembangan aplikasi edukatif berbasis web.
+        </p>
+    </div>
+
+</div>
+""", unsafe_allow_html=True)
+
 
 def main():
     """Main application with multi-page navigation"""
@@ -898,4 +902,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
