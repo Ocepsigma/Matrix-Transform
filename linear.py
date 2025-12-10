@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-🔄 Matrix Transformation Studio - Multi Page Version (Updated Profile)
+🔄 Matrix Transformation Studio - Multi Page Version (Fixed Profile)
 Page 1: Main Application
-Page 2: Creator Profile - Yoseph Sihite dengan foto dari GitHub (UPDATED)
+Page 2: Creator Profile - Yoseph Sihite dengan foto dari GitHub (FIXED)
 """
 
 import streamlit as st
