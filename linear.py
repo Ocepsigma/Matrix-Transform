@@ -880,37 +880,6 @@ def profile_page():
             </div>
         </div>
         """, unsafe_allow_html=True)
-    
-    # Contact section
-    st.markdown("""
-    <div class="profile-card">
-        <h3 style="margin: 0 0 1rem 0; color: #1e293b;">📬 Hubungi Saya</h3>
-        <p style="margin: 0 0 1rem 0; color: #64748b;">Jangan ragu untuk menghubungi saya untuk kolaborasi, pertanyaan, atau feedback tentang Matrix Transformation Studio!</p>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-            <div style="text-align: center; padding: 1rem; background: #f8fafc; border-radius: 8px;">
-                <div style="font-size: 2rem; margin-bottom: 0.5rem;">📧</div>
-                <strong>Email:</strong><br>
-                <a href="mailto:yoseph.sihite@example.com" style="color: #667eea; text-decoration: none;">yoseph.sihite@example.com</a>
-            </div>
-            <div style="text-align: center; padding: 1rem; background: #f8fafc; border-radius: 8px;">
-                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔗</div>
-                <strong>GitHub:</strong><br>
-                <a href="https://github.com/yosephsihite" target="_blank" style="color: #667eea; text-decoration: none;">github.com/yosephsihite</a>
-            </div>
-            <div style="text-align: center; padding: 1rem; background: #f8fafc; border-radius: 8px;">
-                <div style="font-size: 2rem; margin-bottom: 0.5rem;">💼</div>
-                <strong>LinkedIn:</strong><br>
-                <a href="https://linkedin.com/in/yosephsihite" target="_blank" style="color: #667eea; text-decoration: none;">linkedin.com/in/yosephsihite</a>
-            </div>
-            <div style="text-align: center; padding: 1rem; background: #f8fafc; border-radius: 8px;">
-                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎓</div>
-                <strong>Academic:</strong><br>
-                <span style="color: #64748b;">Linear Algebra - Group 2</span>
-            </div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
 
 def main():
     """Main application with multi-page navigation"""
@@ -929,3 +898,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
