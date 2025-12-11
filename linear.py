@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 """
-🔄 Matrix Transformation Studio - Final Version (Simple & Stable)
+🔄 Matrix Transformation Studio - Final Version Complete
 Page 1: Main Application
 Page 2: Creator Profile - Yoseph Sihite
+✅ Foto profil dengan zoom yang tepat dan seimbang
+✅ Development Team tanpa HTML
+✅ Fungsi load foto dari GitHub yang diperbaiki
+✅ Semua fitur lengkap dan stabil
 """
 
 import streamlit as st
@@ -176,7 +180,7 @@ st.markdown("""
         color: #92400e;
     }
     
-    /* Profile photo styling - IMPROVED */
+    /* Profile photo styling - DIPERBAIKI */
     .profile-photo {
         width: 200px;
         height: 200px;
@@ -207,7 +211,10 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 def load_profile_photo():
-    """Load profile photo dari GitHub dengan processing otomatis"""
+    """
+    Load profile photo dari GitHub dengan processing otomatis
+    Sesuai anjuran dosen untuk fungsi yang lebih sederhana
+    """
     try:
         # GitHub Raw URL yang benar
         url = "https://raw.githubusercontent.com/Ocepsigma/Matrix-Transform/main/foto_yoseph.jpg"
@@ -219,7 +226,7 @@ def load_profile_photo():
             # Load image untuk diproses
             image = Image.open(io.BytesIO(response.content))
             
-            # Proses foto untuk profil dengan zoom otomatis
+            # Proses foto untuk profil dengan zoom yang tepat
             processed_image = process_profile_photo(image)
             
             # Convert processed image ke base64
@@ -236,7 +243,10 @@ def load_profile_photo():
         return None, False
 
 def process_profile_photo(image):
-    """Process foto profil untuk tampilan optimal dengan zoom ke wajah"""
+    """
+    Process foto profil untuk tampilan optimal dengan zoom yang seimbang
+    DIPERBAIKI: Tidak terlalu zoom ke atas
+    """
     try:
         # Convert ke RGB jika perlu
         if image.mode != 'RGB':
@@ -248,13 +258,13 @@ def process_profile_photo(image):
         # Target size untuk profil (lebih besar untuk kualitas)
         target_size = 400
         
-        # Hitung rasio untuk zoom
-        # Untuk foto portrait, zoom ke wajah area (bagian atas)
+        # Hitung rasio untuk zoom yang lebih seimbang
+        # Untuk foto portrait, zoom ke area wajah dengan proporsi lebih baik
         if height > width:  # Portrait orientation
-            # Crop ke area wajah (atas 60% dari gambar)
-            crop_height = int(height * 0.6)
-            crop_top = 0
-            crop_bottom = crop_height
+            # DIPERBAIKI: Crop ke area wajah yang lebih seimbang
+            crop_height = int(height * 0.7)  # 70% dari tinggi (lebih banyak)
+            crop_top = int(height * 0.05)     # Mulai dari 5% dari atas (tidak dari paling atas)
+            crop_bottom = crop_top + crop_height
             
             # Jika lebar terlalu kecil, crop dari samping
             if width < target_size:
@@ -262,7 +272,7 @@ def process_profile_photo(image):
                 crop_left = 0
                 crop_right = width
             else:
-                crop_width = int(width * 0.8)  # Ambil 80% dari lebar
+                crop_width = int(width * 0.85)  # Ambil 85% dari lebar (lebih banyak)
                 crop_left = (width - crop_width) // 2
                 crop_right = crop_left + crop_width
             
@@ -282,15 +292,15 @@ def process_profile_photo(image):
         # Resize ke target size dengan high quality
         processed_image = cropped.resize((target_size, target_size), Image.Resampling.LANCZOS)
         
-        # Enhancement untuk kualitas foto profil
+        # DIPERBAIKI: Enhancement yang lebih subtle
         enhancer = ImageEnhance.Brightness(processed_image)
-        processed_image = enhancer.enhance(1.1)  # Sedikit lebih bright
+        processed_image = enhancer.enhance(1.05)  # 5% brightness (lebih subtle)
         
         enhancer = ImageEnhance.Contrast(processed_image)
-        processed_image = enhancer.enhance(1.1)  # Sedikit lebih contrast
+        processed_image = enhancer.enhance(1.05)  # 5% contrast (lebih subtle)
         
         enhancer = ImageEnhance.Sharpness(processed_image)
-        processed_image = enhancer.enhance(1.1)  # Sedikit lebih sharp
+        processed_image = enhancer.enhance(1.05)  # 5% sharpness (lebih subtle)
         
         return processed_image
         
@@ -823,7 +833,11 @@ def main_app():
             """, unsafe_allow_html=True)
 
 def profile_page():
-    """Profile page for Yoseph Sihite dengan foto profil yang diperbaiki"""
+    """
+    Profile page for Yoseph Sihite dengan foto profil yang diperbaiki
+    ✅ Development Team TANPA HTML (menggunakan st.write() saja)
+    ✅ Foto profil dengan zoom yang seimbang
+    """
     # Header
     st.markdown("""
     <div class="profile-header">
@@ -840,11 +854,11 @@ def profile_page():
         st.warning("⚠️ Foto profil tidak dapat dimuat dari GitHub. Pastikan file foto_yoseph.jpg ada di repository Ocepsigma/Matrix-Transform/main/")
         st.info("🔗 URL: https://raw.githubusercontent.com/Ocepsigma/Matrix-Transform/main/foto_yoseph.jpg")
         
-        # Fallback: Upload foto manual dengan processing
+        # Fallback: Upload foto manual dengan processing yang sama
         st.write("### Upload Foto Profil Manual")
         uploaded_photo = st.file_uploader("Pilih foto profil", type=['jpg', 'jpeg', 'png'])
         if uploaded_photo is not None:
-            # Load dan proses uploaded file
+            # Load dan proses uploaded file dengan fungsi yang sama
             image = Image.open(uploaded_photo)
             processed_image = process_profile_photo(image)
             
@@ -888,7 +902,7 @@ def profile_page():
         """, unsafe_allow_html=True)
     
     with col2:
-        # Development Team content menggunakan st.write() TANPA HTML
+        # ✅ Development Team content TANPA HTML (hanya st.write())
         st.write("---")
         st.write("## 👤 Lead Developer")
         st.write("**Nama:** Yoseph Sihite")
@@ -903,6 +917,26 @@ def profile_page():
         st.write("---")
         st.write("## 💪 Kontribusi")
         st.write("**Seluruh proses pengembangan proyek ini dikerjakan secara mandiri** oleh Yoseph Sihite. Kontribusi yang dilakukan mencakup perancangan konsep dan arsitektur aplikasi, pengembangan algoritma transformasi matriks, serta implementasi konsep aljabar linear ke dalam sistem visual interaktif. Selain itu, pengembangan web app, termasuk desain antarmuka pengguna, pengelolaan logika aplikasi, dan pengujian fungsionalitas, sepenuhnya diselesaikan secara individual karena tidak adanya anggota lain dalam Group 2.")
+        
+        st.write("---")
+        st.write("## 🔧 Kontribusi Utama:")
+        st.write("1. **Perancangan Konsep & Arsitektur Aplikasi:** Merancang struktur aplikasi yang efisien dan user-friendly")
+        st.write("2. **Pengembangan Algoritma Transformasi Matriks:** Implementasi algoritma matriks 3×3 untuk transformasi 2D")
+        st.write("3. **Implementasi Konsep Aljabar Linear:** Mengubah konsep matematis abstrak menjadi visualisasi interaktif")
+        st.write("4. **Pengembangan Web Application:** Membangun antarmuka pengguna dengan Streamlit")
+        st.write("5. **Desain Antarmuka Pengguna:** Menciptakan UI yang intuitif dan menarik")
+        st.write("6. **Pengelolaan Logika Aplikasi:** Implementasi backend untuk pemrosesan gambar")
+        st.write("7. **Pengujian Fungsionalitas:** Testing dan debugging fitur aplikasi")
+        
+        st.write("---")
+        st.write("## 🔧 Teknologi yang Digunakan:")
+        st.write("1. **Frontend:** Streamlit (Python Web Framework), HTML/CSS (Styling & Layout), JavaScript (Interaktivitas & Validasi)")
+        st.write("2. **Backend:** Python (Bahasa Pemrograman Utama), NumPy (Operasi Matriks & Perhitungan Matematis), Pillow/PIL (Pemrosesan Gambar & Transformasi), Matplotlib (Visualisasi Matriks & Grafik)")
+        st.write("3. **Design Tools:** Gradient Styling (Desain Modern), Card-based Layout (Tata Letak Kartu), Responsive Design (Beradaptasi di Berbagai Perangkat)")
+        
+        st.write("---")
+        st.write("## 🎓 Prestasi Akademik:")
+        st.write("Proyek ini **menunjukkan pemahaman komprehensif konsep aljabar linear** dan **kemampuan mengimplementasikan teori matematis** dalam aplikasi praktis. Aplikasi berhasil **mengubah konsep abstrak menjadi alat pembelajaran visual yang interaktif** dan **dapat digunakan sebagai demonstrasi dalam pengajaran matematika**.")
         
 def main():
     """Main application with multi-page navigation"""
