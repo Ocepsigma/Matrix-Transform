@@ -3,7 +3,7 @@
 🔄 Matrix Transformation Studio - Final Version Complete
 Page 1: Main Application
 Page 2: Creator Profile - Yoseph Sihite
-✅ Foto profil dengan zoom yang tepat dan seimbang
+✅ Foto profil dengan zoom yang tepat dan posisi yang seimbang
 ✅ Development Team tanpa HTML
 ✅ Fungsi load foto dari GitHub yang diperbaiki
 ✅ Semua fitur lengkap dan stabil
@@ -245,7 +245,7 @@ def load_profile_photo():
 def process_profile_photo(image):
     """
     Process foto profil untuk tampilan optimal dengan zoom yang seimbang
-    DIPERBAIKI: Tidak terlalu zoom ke atas
+    DIPERBAIKI: Posisi crop yang lebih turun untuk wajah yang lengkap
     """
     try:
         # Convert ke RGB jika perlu
@@ -261,9 +261,9 @@ def process_profile_photo(image):
         # Hitung rasio untuk zoom yang lebih seimbang
         # Untuk foto portrait, zoom ke area wajah dengan proporsi lebih baik
         if height > width:  # Portrait orientation
-            # DIPERBAIKI: Crop ke area wajah yang lebih seimbang
-            crop_height = int(height * 0.7)  # 70% dari tinggi (lebih banyak)
-            crop_top = int(height * 0.05)     # Mulai dari 5% dari atas (tidak dari paling atas)
+            # DIPERBAIKI: Crop ke area wajah yang lebih turun
+            crop_height = int(height * 0.7)  # 70% dari tinggi
+            crop_top = int(height * 0.15)     # Mulai dari 15% dari atas (lebih turun)
             crop_bottom = crop_top + crop_height
             
             # Jika lebar terlalu kecil, crop dari samping
@@ -272,7 +272,7 @@ def process_profile_photo(image):
                 crop_left = 0
                 crop_right = width
             else:
-                crop_width = int(width * 0.85)  # Ambil 85% dari lebar (lebih banyak)
+                crop_width = int(width * 0.85)  # Ambil 85% dari lebar
                 crop_left = (width - crop_width) // 2
                 crop_right = crop_left + crop_width
             
@@ -836,7 +836,7 @@ def profile_page():
     """
     Profile page for Yoseph Sihite dengan foto profil yang diperbaiki
     ✅ Development Team TANPA HTML (menggunakan st.write() saja)
-    ✅ Foto profil dengan zoom yang seimbang
+    ✅ Foto profil dengan zoom yang seimbang dan posisi yang tepat
     """
     # Header
     st.markdown("""
