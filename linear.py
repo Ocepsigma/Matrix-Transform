@@ -208,40 +208,19 @@ st.markdown("""
 def load_profile_photo():
     """Load profile photo dari GitHub"""
     try:
-        # GitHub configuration
-        github_username = "yosephsihite"
-        repo_name = "matrix-transformation-studio"
-        photo_filename = "foto_yoseph.jpg"
+        # GitHub Raw URL yang benar
+        url = "https://raw.githubusercontent.com/Ocepsigma/Matrix-Transform/main/foto_yoseph.jpg"
         
-        # Construct GitHub raw URL
-        photo_url = f"https://raw.githubusercontent.com/{github_username}/{repo_name}/main/{photo_filename}"
+        # Request ke GitHub Raw
+        response = requests.get(url)
         
-        # Test URL accessibility
-        try:
-            response = requests.get(photo_url, timeout=10)
-            
-            if response.status_code == 200:
-                # Load image
-                image = Image.open(io.BytesIO(response.content))
-                
-                # Resize untuk profil (200x200)
-                image = image.resize((200, 200), Image.Resampling.LANCZOS)
-                
-                # Convert to bytes untuk display
-                img_buffer = io.BytesIO()
-                image.save(img_buffer, format='JPEG')
-                img_bytes = img_buffer.getvalue()
-                
-                # Encode ke base64
-                img_base64 = base64.b64encode(img_bytes).decode()
-                
-                return img_base64, True
-            else:
-                return None, False
-                
-        except requests.exceptions.RequestException as e:
+        if response.status_code == 200:
+            # Convert response content ke base64
+            photo_base64 = base64.b64encode(response.content).decode("utf-8")
+            return photo_base64, True
+        else:
             return None, False
-        
+            
     except Exception as e:
         return None, False
 
@@ -782,6 +761,21 @@ def profile_page():
     # Load profile photo
     photo_base64, photo_loaded = load_profile_photo()
     
+    # Debug info untuk foto
+    if not photo_loaded:
+        st.warning("⚠️ Foto profil tidak dapat dimuat dari GitHub. Pastikan file foto_yoseph.jpg ada di repository Ocepsigma/Matrix-Transform/main/")
+        st.info("🔗 URL: https://raw.githubusercontent.com/Ocepsigma/Matrix-Transform/main/foto_yoseph.jpg")
+        
+        # Fallback: Upload foto manual
+        st.write("### Upload Foto Profil Manual")
+        uploaded_photo = st.file_uploader("Pilih foto profil", type=['jpg', 'jpeg', 'png'])
+        if uploaded_photo is not None:
+            # Convert uploaded file ke base64
+            photo_bytes = uploaded_photo.read()
+            photo_base64 = base64.b64encode(photo_bytes).decode("utf-8")
+            photo_loaded = True
+            st.success("✅ Foto berhasil diupload!")
+    
     # Profile section
     col1, col2 = st.columns([1, 2])
     
@@ -847,7 +841,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
