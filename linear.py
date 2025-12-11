@@ -809,8 +809,6 @@ def profile_page():
             <h3 style="text-align: center; margin: 1rem 0 0.5rem 0; color: #1e293b;">Yoseph Sihite</h3>
             <p style="text-align: center; margin: 0.5rem 0; color: #64748b;">📍 Cikarang, Indonesia</p>
             <div style="text-align: center; margin: 1rem 0;">
-                <a href="https://github.com/yosephsihite" target="_blank" style="margin: 0 0.5rem 0; text-decoration: none; color: #667eea;">🔗 GitHub</a>
-                <a href="mailto:yosephsihite9@gmail.com" style="margin: 0 0.5rem 0; text-decoration: none; color: #667eea;">📧 Email</a>
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -856,5 +854,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
