@@ -7,6 +7,7 @@ Page 2: Creator Profile - Yoseph Sihite
 ✅ Development Team tanpa HTML
 ✅ Fungsi load foto dari GitHub yang diperbaiki
 ✅ Dukungan 2 Bahasa: Indonesia & English
+✅ Profil yang lebih ringkas (tanpa kontribusi utama, teknologi, dan prestasi akademik)
 ✅ Semua fitur lengkap dan stabil
 """
 
@@ -132,10 +133,6 @@ TRANSLATIONS = {
         'project_description': '**Studio Transformasi Matriks** adalah aplikasi web interaktif yang dikembangkan sebagai **Proyek Akhir Mata Kuliah Aljabar Linear**. Aplikasi ini dirancang untuk **memvisualisasikan konsep transformasi matriks** agar lebih mudah dipahami melalui pendekatan visualisasi berbasis web.',
         'contributions': '## 💪 Kontribusi',
         'contributions_description': '**Seluruh proses pengembangan proyek ini dikerjakan secara mandiri** oleh Yoseph Sihite. Kontribusi yang dilakukan mencakup perancangan konsep dan arsitektur aplikasi, pengembangan algoritma transformasi matriks, serta implementasi konsep aljabar linear ke dalam sistem visual interaktif. Selain itu, pengembangan web app, termasuk desain antarmuka pengguna, pengelolaan logika aplikasi, dan pengujian fungsionalitas, sepenuhnya diselesaikan secara individual karena tidak adanya anggota lain dalam Group 2.',
-        'main_contributions': '## 🔧 Kontribusi Utama:',
-        'technologies': '## 🔧 Teknologi yang Digunakan:',
-        'academic_achievement': '## 🎓 Prestasi Akademik:',
-        'achievement_description': 'Proyek ini **menunjukkan pemahaman komprehensif konsep aljabar linear** dan **kemampuan mengimplementasikan teori matematis** dalam aplikasi praktis. Aplikasi berhasil **mengubah konsep abstrak menjadi alat pembelajaran visual yang interaktif** dan **dapat digunakan sebagai demonstrasi dalam pengajaran matematika**.',
         
         # Language selector
         'select_language': '🌐 Pilih Bahasa',
@@ -241,10 +238,6 @@ TRANSLATIONS = {
         'project_description': '**Matrix Transformation Studio** is an interactive web application developed as a **Final Project for Linear Algebra Course**. This application is designed to **visualize matrix transformation concepts** to make them easier to understand through web-based visualization approach.',
         'contributions': '## 💪 Contributions',
         'contributions_description': '**The entire development process of this project was done individually** by Yoseph Sihite. Contributions include concept design and application architecture, matrix transformation algorithm development, and implementation of linear algebra concepts into interactive visual systems. Additionally, web app development, including user interface design, application logic management, and functionality testing, was completed entirely individually due to the absence of other members in Group 2.',
-        'main_contributions': '## 🔧 Main Contributions:',
-        'technologies': '## 🔧 Technologies Used:',
-        'academic_achievement': '## 🎓 Academic Achievement:',
-        'achievement_description': 'This project **demonstrates comprehensive understanding of linear algebra concepts** and **ability to implement mathematical theory** in practical applications. The application successfully **transforms abstract concepts into interactive visual learning tools** and **can be used as demonstrations in mathematics teaching**.',
         
         # Language selector
         'select_language': '🌐 Select Language',
@@ -1218,6 +1211,7 @@ def profile_page():
     ✅ Development Team TANPA HTML (menggunakan st.write() saja)
     ✅ Foto profil dengan zoom yang seimbang dan posisi yang tepat
     ✅ Dukungan bilingual (Indonesia & English)
+    ✅ Profil yang lebih ringkas (tanpa kontribusi utama, teknologi, dan prestasi akademik)
     """
     # Header
     st.markdown(f"""
@@ -1298,41 +1292,6 @@ def profile_page():
         st.write("---")
         st.write(get_text('contributions'))
         st.write(get_text('contributions_description'))
-        
-        st.write("---")
-        st.write(get_text('main_contributions'))
-        lang = st.session_state.get('language', 'id')
-        if lang == 'id':
-            st.write("1. **Perancangan Konsep & Arsitektur Aplikasi:** Merancang struktur aplikasi yang efisien dan user-friendly")
-            st.write("2. **Pengembangan Algoritma Transformasi Matriks:** Implementasi algoritma matriks 3×3 untuk transformasi 2D")
-            st.write("3. **Implementasi Konsep Aljabar Linear:** Mengubah konsep matematis abstrak menjadi visualisasi interaktif")
-            st.write("4. **Pengembangan Web Application:** Membangun antarmuka pengguna dengan Streamlit")
-            st.write("5. **Desain Antarmuka Pengguna:** Menciptakan UI yang intuitif dan menarik")
-            st.write("6. **Pengelolaan Logika Aplikasi:** Implementasi backend untuk pemrosesan gambar")
-            st.write("7. **Pengujian Fungsionalitas:** Testing dan debugging fitur aplikasi")
-        else:
-            st.write("1. **Concept Design & Application Architecture:** Designing efficient and user-friendly application structure")
-            st.write("2. **Matrix Transformation Algorithm Development:** Implementation of 3×3 matrix algorithms for 2D transformation")
-            st.write("3. **Linear Algebra Concept Implementation:** Transforming abstract mathematical concepts into interactive visualization")
-            st.write("4. **Web Application Development:** Building user interface with Streamlit")
-            st.write("5. **User Interface Design:** Creating intuitive and attractive UI")
-            st.write("6. **Application Logic Management:** Backend implementation for image processing")
-            st.write("7. **Functionality Testing:** Testing and debugging application features")
-        
-        st.write("---")
-        st.write(get_text('technologies'))
-        if lang == 'id':
-            st.write("1. **Frontend:** Streamlit (Python Web Framework), HTML/CSS (Styling & Layout), JavaScript (Interaktivitas & Validasi)")
-            st.write("2. **Backend:** Python (Bahasa Pemrograman Utama), NumPy (Operasi Matriks & Perhitungan Matematis), Pillow/PIL (Pemrosesan Gambar & Transformasi), Matplotlib (Visualisasi Matriks & Grafik)")
-            st.write("3. **Design Tools:** Gradient Styling (Desain Modern), Card-based Layout (Tata Letak Kartu), Responsive Design (Beradaptasi di Berbagai Perangkat)")
-        else:
-            st.write("1. **Frontend:** Streamlit (Python Web Framework), HTML/CSS (Styling & Layout), JavaScript (Interactivity & Validation)")
-            st.write("2. **Backend:** Python (Main Programming Language), NumPy (Matrix Operations & Mathematical Calculations), Pillow/PIL (Image Processing & Transformation), Matplotlib (Matrix Visualization & Graphics)")
-            st.write("3. **Design Tools:** Gradient Styling (Modern Design), Card-based Layout, Responsive Design (Adaptable to Various Devices)")
-        
-        st.write("---")
-        st.write(get_text('academic_achievement'))
-        st.write(get_text('achievement_description'))
         
 def main():
     """Main application with multi-page navigation and bilingual support"""
