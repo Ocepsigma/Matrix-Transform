@@ -775,7 +775,7 @@ def profile_page():
     st.markdown("""
     <div class="profile-header">
         <h1 style="margin: 0; font-size: 2.5rem; font-weight: 700;">👨‍💻 Creator Profile</h1>
-        <p style="margin: 1rem 0 0 0; font-size: 1.25rem; opacity: 0.9;">Yoseph Sihite - Linear Algebra Visionary</p>
+        <p style="margin: 1rem 0 0 0; font-size: 1.25rem; opacity: 0.9;">Yoseph Sihite - Linear Algebra</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -807,11 +807,10 @@ def profile_page():
         st.markdown("""
             </div>
             <h3 style="text-align: center; margin: 1rem 0 0.5rem 0; color: #1e293b;">Yoseph Sihite</h3>
-            <p style="text-align: center; margin: 0; color: #64748b;">Computer Vision Developer</p>
-            <p style="text-align: center; margin: 0.5rem 0; color: #64748b;">📍 Jakarta, Indonesia</p>
+            <p style="text-align: center; margin: 0.5rem 0; color: #64748b;">📍 Cikarang, Indonesia</p>
             <div style="text-align: center; margin: 1rem 0;">
                 <a href="https://github.com/yosephsihite" target="_blank" style="margin: 0 0.5rem 0; text-decoration: none; color: #667eea;">🔗 GitHub</a>
-                <a href="mailto:yoseph.sihite@example.com" style="margin: 0 0.5rem 0; text-decoration: none; color: #667eea;">📧 Email</a>
+                <a href="mailto:yosephsihite9@gmail.com" style="margin: 0 0.5rem 0; text-decoration: none; color: #667eea;">📧 Email</a>
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -857,4 +856,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
