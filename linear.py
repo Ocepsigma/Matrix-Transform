@@ -830,7 +830,7 @@ def profile_page():
         st.write("**Nama:** Yoseph Sihite")
         st.write("**Student ID:** 004202400113")
         st.write("**Group:** Group 2 Linear Algebra")
-        st.write("**Role:** Lead Developer & Linear Algebra Specialist")
+        st.write("**Role:** Lead Group")
         
         st.write("---")
         st.write("## 🎯 Project Overview")
@@ -840,27 +840,6 @@ def profile_page():
         st.write("## 💪 Kontribusi")
         st.write("**Seluruh proses pengembangan proyek ini dikerjakan secara mandiri** oleh Yoseph Sihite. Kontribusi yang dilakukan mencakup perancangan konsep dan arsitektur aplikasi, pengembangan algoritma transformasi matriks, serta implementasi konsep aljabar linear ke dalam sistem visual interaktif. Selain itu, pengembangan web app, termasuk desain antarmuka pengguna, pengelolaan logika aplikasi, dan pengujian fungsionalitas, sepenuhnya diselesaikan secara individual karena tidak adanya anggota lain dalam Group 2.")
         
-        st.write("---")
-        st.write("## 🔧 Kontribusi Utama:")
-        st.write("1. **Perancangan Konsep & Arsitektur Aplikasi:** Merancang struktur aplikasi yang efisien dan user-friendly")
-        st.write("2. **Pengembangan Algoritma Transformasi Matriks:** Implementasi algoritma matriks 3×3 untuk transformasi 2D")
-        st.write("3. **Implementasi Konsep Aljabar Linear:** Mengubah konsep matematis abstrak menjadi visualisasi interaktif")
-        st.write("4. **Pengembangan Web Application:** Membangun antarmuka pengguna dengan Streamlit")
-        st.write("5. **Desain Antarmuka Pengguna:** Menciptakan UI yang intuitif dan menarik")
-        st.write("6. **Pengelolaan Logika Aplikasi:** Implementasi backend untuk pemrosesan gambar")
-        st.write("7. **Pengujian Fungsionalitas:** Testing dan debugging fitur aplikasi")
-        
-        st.write("---")
-        st.write("## 🔧 Teknologi yang Digunakan:")
-        st.write("1. **Frontend:** Streamlit (Python Web Framework), HTML/CSS (Styling & Layout), JavaScript (Interaktivitas & Validasi)")
-        st.write("2. **Backend:** Python (Bahasa Pemrograman Utama), NumPy (Operasi Matriks & Perhitungan Matematis), Pillow/PIL (Pemrosesan Gambar & Transformasi), Matplotlib (Visualisasi Matriks & Grafik)")
-        st.write("3. **Design Tools:** Gradient Styling (Desain Modern), Card-based Layout (Tata Letak Kartu), Responsive Design (Beradaptasi di Berbagai Perangkat)")
-        
-        st.write("---")
-        st.write("## 🎓 Prestasi Akademik:")
-        st.write("Proyek ini **menunjukkan pemahaman komprehensif konsep aljabar linear** dan **kemampuan mengimplementasikan teori matematis** dalam aplikasi praktis. Aplikasi berhasil **mengubah konsep abstrak menjadi alat pembelajaran visual yang interaktif** dan **dapat digunakan sebagai demonstrasi dalam pengajaran matematika**.")
-    
-    
 def main():
     """Main application with multi-page navigation"""
     # Page navigation
@@ -878,3 +857,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
