@@ -7,7 +7,7 @@ Page 2: Creator Profile - Yoseph Sihite
 
 import streamlit as st
 import numpy as np
-from PIL import Image, ImageDraw, ImageFile
+from PIL import Image, ImageDraw, ImageFile, ImageEnhance
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import io
@@ -176,12 +176,13 @@ st.markdown("""
         color: #92400e;
     }
     
-    /* Profile photo styling */
+    /* Profile photo styling - IMPROVED */
     .profile-photo {
         width: 200px;
         height: 200px;
         border-radius: 50%;
         object-fit: cover;
+        object-position: center top;
         border: 4px solid white;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         margin: 0 auto 1rem;
@@ -206,7 +207,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 def load_profile_photo():
-    """Load profile photo dari GitHub"""
+    """Load profile photo dari GitHub dengan processing otomatis"""
     try:
         # GitHub Raw URL yang benar
         url = "https://raw.githubusercontent.com/Ocepsigma/Matrix-Transform/main/foto_yoseph.jpg"
@@ -215,14 +216,87 @@ def load_profile_photo():
         response = requests.get(url)
         
         if response.status_code == 200:
-            # Convert response content ke base64
-            photo_base64 = base64.b64encode(response.content).decode("utf-8")
+            # Load image untuk diproses
+            image = Image.open(io.BytesIO(response.content))
+            
+            # Proses foto untuk profil dengan zoom otomatis
+            processed_image = process_profile_photo(image)
+            
+            # Convert processed image ke base64
+            img_buffer = io.BytesIO()
+            processed_image.save(img_buffer, format='JPEG', quality=90)
+            img_bytes = img_buffer.getvalue()
+            photo_base64 = base64.b64encode(img_bytes).decode("utf-8")
+            
             return photo_base64, True
         else:
             return None, False
             
     except Exception as e:
         return None, False
+
+def process_profile_photo(image):
+    """Process foto profil untuk tampilan optimal dengan zoom ke wajah"""
+    try:
+        # Convert ke RGB jika perlu
+        if image.mode != 'RGB':
+            image = image.convert('RGB')
+        
+        # Dapatkan dimensi asli
+        width, height = image.size
+        
+        # Target size untuk profil (lebih besar untuk kualitas)
+        target_size = 400
+        
+        # Hitung rasio untuk zoom
+        # Untuk foto portrait, zoom ke wajah area (bagian atas)
+        if height > width:  # Portrait orientation
+            # Crop ke area wajah (atas 60% dari gambar)
+            crop_height = int(height * 0.6)
+            crop_top = 0
+            crop_bottom = crop_height
+            
+            # Jika lebar terlalu kecil, crop dari samping
+            if width < target_size:
+                crop_width = width
+                crop_left = 0
+                crop_right = width
+            else:
+                crop_width = int(width * 0.8)  # Ambil 80% dari lebar
+                crop_left = (width - crop_width) // 2
+                crop_right = crop_left + crop_width
+            
+            # Crop gambar
+            cropped = image.crop((crop_left, crop_top, crop_right, crop_bottom))
+        else:  # Landscape orientation
+            # Crop ke area tengah
+            crop_width = int(width * 0.8)
+            crop_height = int(height * 0.8)
+            crop_left = (width - crop_width) // 2
+            crop_top = (height - crop_height) // 2
+            crop_right = crop_left + crop_width
+            crop_bottom = crop_top + crop_height
+            
+            cropped = image.crop((crop_left, crop_top, crop_right, crop_bottom))
+        
+        # Resize ke target size dengan high quality
+        processed_image = cropped.resize((target_size, target_size), Image.Resampling.LANCZOS)
+        
+        # Enhancement untuk kualitas foto profil
+        enhancer = ImageEnhance.Brightness(processed_image)
+        processed_image = enhancer.enhance(1.1)  # Sedikit lebih bright
+        
+        enhancer = ImageEnhance.Contrast(processed_image)
+        processed_image = enhancer.enhance(1.1)  # Sedikit lebih contrast
+        
+        enhancer = ImageEnhance.Sharpness(processed_image)
+        processed_image = enhancer.enhance(1.1)  # Sedikit lebih sharp
+        
+        return processed_image
+        
+    except Exception as e:
+        # Jika proses gagal, return original image
+        return image
 
 class SafeMatrixTransformer:
     """Matrix Transformer dengan proteksi DecompressionBombError"""
@@ -749,7 +823,7 @@ def main_app():
             """, unsafe_allow_html=True)
 
 def profile_page():
-    """Profile page for Yoseph Sihite"""
+    """Profile page for Yoseph Sihite dengan foto profil yang diperbaiki"""
     # Header
     st.markdown("""
     <div class="profile-header">
@@ -758,7 +832,7 @@ def profile_page():
     </div>
     """, unsafe_allow_html=True)
     
-    # Load profile photo
+    # Load profile photo dengan processing otomatis
     photo_base64, photo_loaded = load_profile_photo()
     
     # Debug info untuk foto
@@ -766,15 +840,21 @@ def profile_page():
         st.warning("⚠️ Foto profil tidak dapat dimuat dari GitHub. Pastikan file foto_yoseph.jpg ada di repository Ocepsigma/Matrix-Transform/main/")
         st.info("🔗 URL: https://raw.githubusercontent.com/Ocepsigma/Matrix-Transform/main/foto_yoseph.jpg")
         
-        # Fallback: Upload foto manual
+        # Fallback: Upload foto manual dengan processing
         st.write("### Upload Foto Profil Manual")
         uploaded_photo = st.file_uploader("Pilih foto profil", type=['jpg', 'jpeg', 'png'])
         if uploaded_photo is not None:
-            # Convert uploaded file ke base64
-            photo_bytes = uploaded_photo.read()
-            photo_base64 = base64.b64encode(photo_bytes).decode("utf-8")
+            # Load dan proses uploaded file
+            image = Image.open(uploaded_photo)
+            processed_image = process_profile_photo(image)
+            
+            # Convert processed image ke base64
+            img_buffer = io.BytesIO()
+            processed_image.save(img_buffer, format='JPEG', quality=90)
+            img_bytes = img_buffer.getvalue()
+            photo_base64 = base64.b64encode(img_bytes).decode("utf-8")
             photo_loaded = True
-            st.success("✅ Foto berhasil diupload!")
+            st.success("✅ Foto berhasil diupload dan diproses!")
     
     # Profile section
     col1, col2 = st.columns([1, 2])
