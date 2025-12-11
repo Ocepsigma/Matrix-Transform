@@ -814,13 +814,6 @@ def profile_page():
         """, unsafe_allow_html=True)
     
     with col2:
-        # Development Team Section - TANPA HTML
-        st.markdown("""
-        <div class="team-card">
-            <h3 style="margin: 0 0 1rem 0; color: #1e293b;">👨‍💻 Development Team</h3>
-        </div>
-        """, unsafe_allow_html=True)
-        
         # Development Team content menggunakan st.write() TANPA HTML
         st.write("---")
         st.write("## 👤 Lead Developer")
@@ -854,6 +847,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
