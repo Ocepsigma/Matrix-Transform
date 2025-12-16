@@ -1,3 +1,18 @@
+#!/usr/bin/env python3
+"""
+🔄 Matrix Transformation Studio - Final Version Complete with Image Processing
+Page 1: Main Application with 7 Features
+Page 2: Creator Profile - Yoseph Sihite
+✅ Foto profil dengan zoom yang tepat dan posisi yang seimbang
+✅ Development Team tanpa HTML
+✅ Fungsi load foto dari GitHub yang diperbaiki
+✅ Dukungan 2 Bahasa: Indonesia & English
+✅ Profil yang lebih ringkas (tanpa kontribusi utama, teknologi, dan prestasi akademik)
+✅ Semua fitur lengkap dan stabil
+✅ 7 Fitur Lengkap: 5 Transformasi Matriks + 2 Pemrosesan Gambar
+✅ Penjelasan lengkap semua fitur di halaman utama
+"""
+
 import streamlit as st
 import numpy as np
 from PIL import Image, ImageDraw, ImageFile, ImageEnhance, ImageFilter
@@ -56,6 +71,7 @@ TRANSLATIONS = {
         'reflection': '🔁 Refleksi',
         'blur': '🌫 Blur',
         'sharpen': '🔍 Tajamkan',
+        'background_removal': '🎨 Hapus Latar Belakang',
         
         # Parameters
         'translation_params': 'Parameter Translasi',
@@ -74,6 +90,7 @@ TRANSLATIONS = {
         'vertical_reflection': 'Refleksi Vertikal',
         'blur_intensity': 'Intensitas Blur',
         'sharpen_intensity': 'Intensitas Tajamkan',
+        'background_tolerance': 'Toleransi Latar Belakang',
         
         # Current values
         'current': 'Saat ini:',
@@ -102,6 +119,7 @@ TRANSLATIONS = {
         'reflection_desc': 'Cerminkan objek secara horizontal dan/atau vertikal',
         'blur_desc': 'Menghaluskan gambar dengan efek blur',
         'sharpen_desc': 'Meningkatkan ketajaman gambar',
+        'background_removal_desc': 'Menghapus latar belakang gambar',
         
         # Profile Page
         'creator_profile': '👨‍💻 Profil Pembuat',
@@ -167,6 +185,7 @@ TRANSLATIONS = {
         'reflection': '🔁 Reflection',
         'blur': '🌫 Blur',
         'sharpen': '🔍 Sharpen',
+        'background_removal': '🎨 Background Removal',
         
         # Parameters
         'translation_params': 'Translation Parameters',
@@ -185,6 +204,7 @@ TRANSLATIONS = {
         'vertical_reflection': 'Vertical Reflection',
         'blur_intensity': 'Blur Intensity',
         'sharpen_intensity': 'Sharpen Intensity',
+        'background_tolerance': 'Background Tolerance',
         
         # Current values
         'current': 'Current:',
@@ -213,6 +233,7 @@ TRANSLATIONS = {
         'reflection_desc': 'Mirror objects horizontally and/or vertically',
         'blur_desc': 'Blur the image with blur effect',
         'sharpen_desc': 'Increase image sharpness',
+        'background_removal_desc': 'Remove background from image',
         
         # Profile Page
         'creator_profile': '👨‍💻 Creator Profile',
@@ -1250,6 +1271,8 @@ def main_app():
             active.append(get_text('blur'))
         if sharpen_intensity > 0:
             active.append(get_text('sharpen'))
+        if apply_bg_removal:
+            active.append(get_text('background_removal'))
         
         if active:
             st.info(f"{get_text('active_transformations')} {', '.join(active)}")
@@ -1453,5 +1476,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
