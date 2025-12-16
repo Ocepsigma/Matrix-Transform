@@ -9,7 +9,7 @@ Page 2: Creator Profile - Yoseph Sihite
 ✅ Dukungan 2 Bahasa: Indonesia & English
 ✅ Profil yang lebih ringkas (tanpa kontribusi utama, teknologi, dan prestasi akademik)
 ✅ Semua fitur lengkap dan stabil
-✅ Image Processing: Blur, Sharpen, Background Removal
+✅ Image Processing: Blur, Sharpen, Background Removal (digabung dalam satu hasil)
 """
 
 import streamlit as st
@@ -56,7 +56,6 @@ TRANSLATIONS = {
         
         # Controls
         'transformation_controls': '🎛️ Kontrol Transformasi',
-        'image_processing': '🎨 Pemrosesan Gambar',
         'upload_image': '📤 Unggah Gambar',
         'upload_help': 'Unggah gambar untuk menerapkan transformasi (Maks: 10MB, 50MP)',
         'file_too_large': '❌ File terlalu besar!',
@@ -69,16 +68,9 @@ TRANSLATIONS = {
         'rotation': '🔄 Rotasi',
         'shearing': '🔀 Geser',
         'reflection': '🔁 Refleksi',
-        
-        # Image Processing
         'blur': '🌫 Blur',
         'sharpen': '🔍 Tajamkan',
         'background_removal': '🎨 Hapus Latar Belakang',
-        'blur_intensity': 'Intensitas Blur',
-        'sharpen_intensity': 'Intensitas Tajamkan',
-        'background_tolerance': 'Toleransi Latar Belakang',
-        'apply_processing': 'Terapkan Pemrosesan',
-        'reset_processing': 'Reset Pemrosesan',
         
         # Parameters
         'translation_params': 'Parameter Translasi',
@@ -95,6 +87,9 @@ TRANSLATIONS = {
         'reflection_params': 'Parameter Refleksi',
         'horizontal_reflection': 'Refleksi Horizontal',
         'vertical_reflection': 'Refleksi Vertikal',
+        'blur_intensity': 'Intensitas Blur',
+        'sharpen_intensity': 'Intensitas Tajamkan',
+        'background_tolerance': 'Toleransi Latar Belakang',
         
         # Current values
         'current': 'Saat ini:',
@@ -107,12 +102,9 @@ TRANSLATIONS = {
         # Display
         'original_image': '📷 Gambar Asli',
         'original_label': 'ASLI',
-        'transformed_image': '✨ Gambar Transformasi',
-        'transformed_label': 'TRANSFORMASI',
-        'processed_image': '🎨 Gambar Diproses',
-        'processed_label': 'DIPROSES',
-        'download_image': '💾 Unduh Gambar Transformasi',
-        'download_processed': '💾 Unduh Gambar Diproses',
+        'transformed_image': '✨ Gambar Hasil',
+        'transformed_label': 'HASIL',
+        'download_image': '💾 Unduh Gambar Hasil',
         'transformation_matrix': '📊 Matriks Transformasi',
         'matrix_explanation': '📖 Penjelasan Komponen Matriks',
         'active_transformations': '🔧 Transformasi Aktif:',
@@ -178,7 +170,6 @@ TRANSLATIONS = {
         
         # Controls
         'transformation_controls': '🎛️ Transformation Controls',
-        'image_processing': '🎨 Image Processing',
         'upload_image': '📤 Upload Image',
         'upload_help': 'Upload an image to apply transformations (Max: 10MB, 50MP)',
         'file_too_large': '❌ File too large!',
@@ -191,16 +182,9 @@ TRANSLATIONS = {
         'rotation': '🔄 Rotation',
         'shearing': '🔀 Shearing',
         'reflection': '🔁 Reflection',
-        
-        # Image Processing
         'blur': '🌫 Blur',
         'sharpen': '🔍 Sharpen',
         'background_removal': '🎨 Background Removal',
-        'blur_intensity': 'Blur Intensity',
-        'sharpen_intensity': 'Sharpen Intensity',
-        'background_tolerance': 'Background Tolerance',
-        'apply_processing': 'Apply Processing',
-        'reset_processing': 'Reset Processing',
         
         # Parameters
         'translation_params': 'Translation Parameters',
@@ -217,6 +201,9 @@ TRANSLATIONS = {
         'reflection_params': 'Reflection Parameters',
         'horizontal_reflection': 'Horizontal Reflection',
         'vertical_reflection': 'Vertical Reflection',
+        'blur_intensity': 'Blur Intensity',
+        'sharpen_intensity': 'Sharpen Intensity',
+        'background_tolerance': 'Background Tolerance',
         
         # Current values
         'current': 'Current:',
@@ -229,12 +216,9 @@ TRANSLATIONS = {
         # Display
         'original_image': '📷 Original Image',
         'original_label': 'ORIGINAL',
-        'transformed_image': '✨ Transformed Image',
-        'transformed_label': 'TRANSFORMED',
-        'processed_image': '🎨 Processed Image',
-        'processed_label': 'PROCESSED',
-        'download_image': '💾 Download Transformed Image',
-        'download_processed': '💾 Download Processed Image',
+        'transformed_image': '✨ Result Image',
+        'transformed_label': 'RESULT',
+        'download_image': '💾 Download Result Image',
         'transformation_matrix': '📊 Transformation Matrix',
         'matrix_explanation': '📖 Matrix Components Explanation',
         'active_transformations': '🔧 Active Transformations:',
@@ -672,7 +656,6 @@ class SafeMatrixTransformer:
     def __init__(self):
         self.image = None
         self.transformed_image = None
-        self.processed_image = None
         self.original_shape = None
     
     def safe_load_image(self, image_source) -> bool:
@@ -735,9 +718,6 @@ class SafeMatrixTransformer:
             
             self.original_shape = self.image.size
             
-            # Initialize processed_image to original image
-            self.processed_image = self.image.copy()
-            
             # Auto-resize untuk performance
             max_size = 2000
             if self.image.width > max_size or self.image.height > max_size:
@@ -745,7 +725,6 @@ class SafeMatrixTransformer:
                 new_width = int(self.image.width * ratio)
                 new_height = int(self.image.height * ratio)
                 self.image = self.image.resize((new_width, new_height), Image.Resampling.LANCZOS)
-                self.processed_image = self.image.copy()
                 self.original_shape = self.image.size
             
             # Restore limit
@@ -760,9 +739,6 @@ class SafeMatrixTransformer:
                 st.error(f"❌ Error loading image: {str(e)}")
             # Restore limit
             Image.MAX_IMAGE_PIXELS = 100000000
-            
-            # Ensure processed_image is None if loading fails
-            self.processed_image = None
             return False
     
     def create_transformation_matrix(self, params: Dict[str, Any]) -> np.ndarray:
@@ -868,6 +844,31 @@ class SafeMatrixTransformer:
             
         except Exception as e:
             st.error(f"Error applying transformation: {str(e)}")
+            return self.image
+    
+    def apply_all_effects(self, matrix: np.ndarray, blur_intensity=0.0, sharpen_intensity=0.0, bg_removal=False, bg_tolerance=30) -> Image.Image:
+        """Apply transformation and all image processing effects in one step"""
+        try:
+            # First apply matrix transformation
+            result = self.safe_apply_transformation(matrix)
+            
+            # Then apply image processing effects
+            if blur_intensity > 0:
+                result = apply_blur(result, blur_intensity)
+            
+            if sharpen_intensity > 0:
+                result = apply_sharpen(result, sharpen_intensity)
+            
+            if bg_removal:
+                result = remove_background(result, bg_tolerance)
+            
+            # Update transformed_image with final result
+            self.transformed_image = result
+            
+            return result
+            
+        except Exception as e:
+            st.error(f"Error applying effects: {str(e)}")
             return self.image
     
     def get_preset_transformations(self) -> Dict[str, Dict[str, Any]]:
@@ -1062,9 +1063,9 @@ def main_app():
             st.markdown("---")
             
             # Transformation tabs
-            tab1, tab2, tab3, tab4, tab5 = st.tabs([
+            tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
                 get_text('translation'), get_text('scaling'), get_text('rotation'), 
-                get_text('shearing'), get_text('reflection')
+                get_text('shearing'), get_text('reflection'), get_text('blur'), get_text('sharpen')
             ])
             
             with tab1:
@@ -1099,6 +1100,24 @@ def main_app():
                     reflect_v = st.checkbox(get_text('vertical_reflection'), key="reflection_vertical")
                 st.caption(f"{get_text('current')} H={reflect_h}, V={reflect_v}")
             
+            with tab6:
+                st.markdown(f"**{get_text('blur_desc')}**")
+                blur_intensity = st.slider(get_text('blur_intensity'), 0.0, 5.0, 0.0, 0.1, key="blur_intensity")
+            
+            with tab7:
+                st.markdown(f"**{get_text('sharpen_desc')}**")
+                sharpen_intensity = st.slider(get_text('sharpen_intensity'), 0.0, 2.0, 0.0, 0.1, key="sharpen_intensity")
+            
+            # Background removal option
+            st.markdown("---")
+            st.markdown(f"**{get_text('background_removal_desc')}**")
+            apply_bg_removal = st.checkbox(get_text('background_removal'), key="apply_bg_removal")
+            
+            if apply_bg_removal:
+                bg_tolerance = st.slider(get_text('background_tolerance'), 10, 100, 30, 5, key="bg_tolerance")
+            else:
+                bg_tolerance = 30
+            
             # Presets
             st.markdown("---")
             st.subheader(get_text('preset_transformations'))
@@ -1112,7 +1131,7 @@ def main_app():
             
             # Reset button
             if st.button(get_text('reset_all'), use_container_width=True):
-                keys_to_remove = ['translation_x', 'translation_y', 'scaling_x', 'scaling_y', 'rotation', 'shearing_x', 'shearing_y', 'reflection_horizontal', 'reflection_vertical']
+                keys_to_remove = ['translation_x', 'translation_y', 'scaling_x', 'scaling_y', 'rotation', 'shearing_x', 'shearing_y', 'reflection_horizontal', 'reflection_vertical', 'blur_intensity', 'sharpen_intensity', 'apply_bg_removal', 'bg_tolerance']
                 for key in keys_to_remove:
                     if key in st.session_state:
                         del st.session_state[key]
@@ -1133,79 +1152,25 @@ def main_app():
             'reflection_vertical': st.session_state.get('reflection_vertical', False)
         }
         
-        # Create and apply transformation
+        # Get image processing parameters
+        blur_intensity = st.session_state.get('blur_intensity', 0.0)
+        sharpen_intensity = st.session_state.get('sharpen_intensity', 0.0)
+        apply_bg_removal = st.session_state.get('apply_bg_removal', False)
+        bg_tolerance = st.session_state.get('bg_tolerance', 30)
+        
+        # Create and apply transformation with all effects
         matrix = transformer.create_transformation_matrix(params)
-        transformed_image = transformer.safe_apply_transformation(matrix)
-        
-        # Image Processing Section
-        st.markdown("---")
-        st.subheader(get_text('image_processing'))
-        
-        # Create tabs for image processing
-        proc_tab1, proc_tab2, proc_tab3 = st.tabs([
-            get_text('blur'), get_text('sharpen'), get_text('background_removal')
-        ])
-        
-        with proc_tab1:
-            st.markdown(f"**{get_text('blur_desc')}**")
-            blur_intensity = st.slider(get_text('blur_intensity'), 0.0, 5.0, 0.0, 0.1, key="blur_intensity")
-        
-        with proc_tab2:
-            st.markdown(f"**{get_text('sharpen_desc')}**")
-            sharpen_intensity = st.slider(get_text('sharpen_intensity'), 0.0, 2.0, 0.0, 0.1, key="sharpen_intensity")
-        
-        with proc_tab3:
-            st.markdown(f"**{get_text('background_removal_desc')}**")
-            apply_bg_removal = st.checkbox(get_text('background_removal'), key="apply_bg_removal")
-            
-            if apply_bg_removal:
-                bg_tolerance = st.slider(get_text('background_tolerance'), 10, 100, 30, 5, key="bg_tolerance")
-            else:
-                bg_tolerance = 30
-        
-        # Apply image processing button
-        col1, col2 = st.columns(2)
-        with col1:
-            if st.button(get_text('apply_processing'), use_container_width=True):
-                # Apply image processing
-                blur_intensity = st.session_state.get('blur_intensity', 0.0)
-                sharpen_intensity = st.session_state.get('sharpen_intensity', 0.0)
-                apply_bg_removal = st.session_state.get('apply_bg_removal', False)
-                bg_tolerance = st.session_state.get('bg_tolerance', 30)
-                
-                # Start with transformed image for processing
-                processed_image = transformed_image.copy()
-                
-                if blur_intensity > 0:
-                    processed_image = apply_blur(processed_image, blur_intensity)
-                
-                if sharpen_intensity > 0:
-                    processed_image = apply_sharpen(processed_image, sharpen_intensity)
-                
-                if apply_bg_removal:
-                    processed_image = remove_background(processed_image, bg_tolerance)
-                
-                # Store processed image in transformer
-                transformer.processed_image = processed_image
-                
-                # Ensure processed_image is in correct format for Streamlit
-                if transformer.processed_image is not None:
-                    # Convert to RGB if needed
-                    if transformer.processed_image.mode != 'RGB':
-                        transformer.processed_image = transformer.processed_image.convert('RGB')
-                    
-                    # Ensure image has proper format attribute
-                    if not hasattr(transformer.processed_image, 'format') or transformer.processed_image.format is None:
-                        transformer.processed_image.format = 'PNG'
-        
-        with col2:
-            if st.button(get_text('reset_processing'), use_container_width=True):
-                # Reset processed image to transformed image
-                transformer.processed_image = transformed_image.copy()
+        transformed_image = transformer.apply_all_effects(
+            matrix, 
+            blur_intensity, 
+            sharpen_intensity, 
+            apply_bg_removal, 
+            bg_tolerance
+        )
         
         # Display results
         st.markdown("---")
-        col1, col2, col3 = st.columns(3)
+        col1, col2 = st.columns(2)
         
         with col1:
             st.subheader(get_text('original_image'))
@@ -1225,32 +1190,6 @@ def main_app():
                     label=get_text('download_image'),
                     data=img_buffer,
                     file_name="transformed_image.png",
-                    mime="image/png",
-                    use_container_width=True
-                )
-        
-        with col3:
-            st.subheader(get_text('processed_image'))
-            # Safety check for processed_image
-            if transformer.processed_image is not None:
-                st.image(transformer.processed_image, use_container_width=True, caption=get_text('processed_label'))
-            else:
-                # Fallback to transformed image if processed_image is None
-                if transformed_image is not None:
-                    st.image(transformed_image, use_container_width=True, caption=get_text('processed_label'))
-                else:
-                    st.info("No processed image available")
-            
-            # Download button for processed image
-            if transformer.processed_image is not None:
-                img_buffer = io.BytesIO()
-                transformer.processed_image.save(img_buffer, format='PNG')
-                img_buffer.seek(0)
-                
-                st.download_button(
-                    label=get_text('download_processed'),
-                    data=img_buffer,
-                    file_name="processed_image.png",
                     mime="image/png",
                     use_container_width=True
                 )
@@ -1308,6 +1247,12 @@ def main_app():
             active.append(get_text('shearing'))
         if params.get('reflection_horizontal', False) or params.get('reflection_vertical', False):
             active.append(get_text('reflection'))
+        if blur_intensity > 0:
+            active.append(get_text('blur'))
+        if sharpen_intensity > 0:
+            active.append(get_text('sharpen'))
+        if apply_bg_removal:
+            active.append(get_text('background_removal'))
         
         if active:
             st.info(f"{get_text('active_transformations')} {', '.join(active)}")
