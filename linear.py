@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
 """
-🔄 Matrix Transformation Studio - Final Version Complete with Image Processing
-Page 1: Main Application with 7 Features
+🔄 Matrix Transformation Studio - Final Version with 7 Features
+Page 1: Main Application - 5 Transformasi Matriks + 2 Pemrosesan Gambar
 Page 2: Creator Profile - Yoseph Sihite
 ✅ Foto profil dengan zoom yang tepat dan posisi yang seimbang
 ✅ Development Team tanpa HTML
 ✅ Fungsi load foto dari GitHub yang diperbaiki
 ✅ Dukungan 2 Bahasa: Indonesia & English
 ✅ Profil yang lebih ringkas (tanpa kontribusi utama, teknologi, dan prestasi akademik)
-✅ Semua fitur lengkap dan stabil
 ✅ 7 Fitur Lengkap: 5 Transformasi Matriks + 2 Pemrosesan Gambar
-✅ Penjelasan lengkap semua fitur di halaman utama
+✅ Tanpa Background Removal - Hanya 7 Fitur Utama
 """
 
 import streamlit as st
@@ -71,7 +70,6 @@ TRANSLATIONS = {
         'reflection': '🔁 Refleksi',
         'blur': '🌫 Blur',
         'sharpen': '🔍 Tajamkan',
-        'background_removal': '🎨 Hapus Latar Belakang',
         
         # Parameters
         'translation_params': 'Parameter Translasi',
@@ -90,7 +88,6 @@ TRANSLATIONS = {
         'vertical_reflection': 'Refleksi Vertikal',
         'blur_intensity': 'Intensitas Blur',
         'sharpen_intensity': 'Intensitas Tajamkan',
-        'background_tolerance': 'Toleransi Latar Belakang',
         
         # Current values
         'current': 'Saat ini:',
@@ -119,7 +116,6 @@ TRANSLATIONS = {
         'reflection_desc': 'Cerminkan objek secara horizontal dan/atau vertikal',
         'blur_desc': 'Menghaluskan gambar dengan efek blur',
         'sharpen_desc': 'Meningkatkan ketajaman gambar',
-        'background_removal_desc': 'Menghapus latar belakang gambar',
         
         # Profile Page
         'creator_profile': '👨‍💻 Profil Pembuat',
@@ -185,7 +181,6 @@ TRANSLATIONS = {
         'reflection': '🔁 Reflection',
         'blur': '🌫 Blur',
         'sharpen': '🔍 Sharpen',
-        'background_removal': '🎨 Background Removal',
         
         # Parameters
         'translation_params': 'Translation Parameters',
@@ -204,7 +199,6 @@ TRANSLATIONS = {
         'vertical_reflection': 'Vertical Reflection',
         'blur_intensity': 'Blur Intensity',
         'sharpen_intensity': 'Sharpen Intensity',
-        'background_tolerance': 'Background Tolerance',
         
         # Current values
         'current': 'Current:',
@@ -233,7 +227,6 @@ TRANSLATIONS = {
         'reflection_desc': 'Mirror objects horizontally and/or vertically',
         'blur_desc': 'Blur the image with blur effect',
         'sharpen_desc': 'Increase image sharpness',
-        'background_removal_desc': 'Remove background from image',
         
         # Profile Page
         'creator_profile': '👨‍💻 Creator Profile',
@@ -524,54 +517,6 @@ def apply_sharpen(image, intensity=1.0):
         st.error(f"Error applying sharpen: {str(e)}")
         return image
 
-def remove_background(image, tolerance=30):
-    """Remove background from image using simple color-based segmentation"""
-    try:
-        # Ensure image is in RGB mode
-        if image.mode != 'RGB':
-            image = image.convert('RGB')
-            
-        # Convert to numpy array
-        img_array = np.array(image)
-        
-        # Create a mask for background removal
-        # Simple approach: remove pixels that are close to the edge colors
-        h, w = img_array.shape[:2]
-        
-        # Get edge colors (corners and edges)
-        edge_colors = []
-        edge_colors.append(img_array[0, 0])  # Top-left
-        edge_colors.append(img_array[0, w-1])  # Top-right
-        edge_colors.append(img_array[h-1, 0])  # Bottom-left
-        edge_colors.append(img_array[h-1, w-1])  # Bottom-right
-        
-        # Calculate average edge color
-        avg_edge_color = np.mean(edge_colors, axis=0)
-        
-        # Create mask based on color distance from edge color
-        mask = np.zeros((h, w), dtype=bool)
-        for i in range(h):
-            for j in range(w):
-                color_diff = np.abs(img_array[i, j] - avg_edge_color)
-                if np.all(color_diff <= tolerance):
-                    mask[i, j] = True
-        
-        # Apply mask to create transparent background
-        result = img_array.copy()
-        result[mask] = [255, 255, 255, 0]  # White with alpha=0 for background
-        
-        # Convert back to PIL Image
-        result = Image.fromarray(result)
-        
-        # Ensure result is RGB
-        if result.mode != 'RGB':
-            result = result.convert('RGB')
-            
-        return result
-    except Exception as e:
-        st.error(f"Error removing background: {str(e)}")
-        return image
-
 def load_profile_photo():
     """
     Load profile photo dari GitHub dengan processing otomatis
@@ -794,19 +739,19 @@ class SafeMatrixTransformer:
             
             # 2. Scaling
             scale_matrix = np.array([[sx, 0, 0], [0, sy, 0], [0, 0, 1]])
-            matrix = scale_matrix @ matrix
+                matrix = scale_matrix @ matrix
             
             # 3. Rotation
             rotation_matrix = np.array([[cos_a, -sin_a, 0], [sin_a, cos_a, 0], [0, 0, 1]])
-            matrix = rotation_matrix @ matrix
+                matrix = rotation_matrix @ matrix
             
             # 4. Shearing
             shear_matrix = np.array([[1, shear_x, 0], [shear_y, 1, 0], [0, 0, 1]])
-            matrix = shear_matrix @ matrix
+                matrix = shear_matrix @ matrix
             
             # 5. Translation
             translation_matrix = np.array([[1, 0, tx], [0, 1, ty], [0, 0, 1]])
-            matrix = translation_matrix @ matrix
+                matrix = translation_matrix @ matrix
             
             return matrix
             
@@ -866,7 +811,7 @@ class SafeMatrixTransformer:
             st.error(f"Error applying transformation: {str(e)}")
             return self.image
     
-    def apply_all_effects(self, matrix: np.ndarray, blur_intensity=0.0, sharpen_intensity=0.0, bg_removal=False, bg_tolerance=30) -> Image.Image:
+    def apply_all_effects(self, matrix: np.ndarray, blur_intensity=0.0, sharpen_intensity=0.0) -> Image.Image:
         """Apply transformation and all image processing effects in one step"""
         try:
             # First apply matrix transformation
@@ -878,9 +823,6 @@ class SafeMatrixTransformer:
             
             if sharpen_intensity > 0:
                 result = apply_sharpen(result, sharpen_intensity)
-            
-            if bg_removal:
-                result = remove_background(result, bg_tolerance)
             
             # Update transformed_image with final result
             self.transformed_image = result
@@ -1128,16 +1070,6 @@ def main_app():
                 st.markdown(f"**{get_text('sharpen_desc')}**")
                 sharpen_intensity = st.slider(get_text('sharpen_intensity'), 0.0, 2.0, 0.0, 0.1, key="sharpen_intensity")
             
-            # Background removal option
-            st.markdown("---")
-            st.markdown(f"**{get_text('background_removal_desc')}**")
-            apply_bg_removal = st.checkbox(get_text('background_removal'), key="apply_bg_removal")
-            
-            if apply_bg_removal:
-                bg_tolerance = st.slider(get_text('background_tolerance'), 10, 100, 30, 5, key="bg_tolerance")
-            else:
-                bg_tolerance = 30
-            
             # Presets
             st.markdown("---")
             st.subheader(get_text('preset_transformations'))
@@ -1151,7 +1083,7 @@ def main_app():
             
             # Reset button
             if st.button(get_text('reset_all'), use_container_width=True):
-                keys_to_remove = ['translation_x', 'translation_y', 'scaling_x', 'scaling_y', 'rotation', 'shearing_x', 'shearing_y', 'reflection_horizontal', 'reflection_vertical', 'blur_intensity', 'sharpen_intensity', 'apply_bg_removal', 'bg_tolerance']
+                keys_to_remove = ['translation_x', 'translation_y', 'scaling_x', 'scaling_y', 'rotation', 'shearing_x', 'shearing_y', 'reflection_horizontal', 'reflection_vertical', 'blur_intensity', 'sharpen_intensity']
                 for key in keys_to_remove:
                     if key in st.session_state:
                         del st.session_state[key]
@@ -1175,17 +1107,13 @@ def main_app():
         # Get image processing parameters
         blur_intensity = st.session_state.get('blur_intensity', 0.0)
         sharpen_intensity = st.session_state.get('sharpen_intensity', 0.0)
-        apply_bg_removal = st.session_state.get('apply_bg_removal', False)
-        bg_tolerance = st.session_state.get('bg_tolerance', 30)
         
         # Create and apply transformation with all effects
         matrix = transformer.create_transformation_matrix(params)
         transformed_image = transformer.apply_all_effects(
             matrix, 
             blur_intensity, 
-            sharpen_intensity, 
-            apply_bg_removal, 
-            bg_tolerance
+            sharpen_intensity
         )
         
         # Display results
@@ -1271,8 +1199,6 @@ def main_app():
             active.append(get_text('blur'))
         if sharpen_intensity > 0:
             active.append(get_text('sharpen'))
-        if apply_bg_removal:
-            active.append(get_text('background_removal'))
         
         if active:
             st.info(f"{get_text('active_transformations')} {', '.join(active)}")
@@ -1355,19 +1281,11 @@ def main_app():
         
         col7, col8, col9 = st.columns([1, 1, 1])
         
-        with col7:
+        with col8:
             st.markdown(f"""
             <div class="card">
                 <h4 style="margin: 0 0 0.5rem 0; color: #667eea;">{get_text('sharpen')}</h4>
                 <p style="margin: 0; color: #64748b; font-size: 0.9rem;">{get_text('sharpen_desc')}</p>
-            </div>
-            """, unsafe_allow_html=True)
-        
-        with col8:
-            st.markdown(f"""
-            <div class="card">
-                <h4 style="margin: 0 0 0.5rem 0; color: #764ba2;">{get_text('background_removal')}</h4>
-                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">{get_text('background_removal_desc')}</p>
             </div>
             """, unsafe_allow_html=True)
 
