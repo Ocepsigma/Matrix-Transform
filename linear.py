@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 🔄 Matrix Transformation Studio - Final Version Complete with Image Processing
-Page 1: Main Application with Image Processing Features
+Page 1: Main Application with 7 Features
 Page 2: Creator Profile - Yoseph Sihite
 ✅ Foto profil dengan zoom yang tepat dan posisi yang seimbang
 ✅ Development Team tanpa HTML
@@ -9,7 +9,8 @@ Page 2: Creator Profile - Yoseph Sihite
 ✅ Dukungan 2 Bahasa: Indonesia & English
 ✅ Profil yang lebih ringkas (tanpa kontribusi utama, teknologi, dan prestasi akademik)
 ✅ Semua fitur lengkap dan stabil
-✅ Image Processing: Blur, Sharpen, Background Removal (digabung dalam satu hasil)
+✅ 7 Fitur Lengkap: 5 Transformasi Matriks + 2 Pemrosesan Gambar
+✅ Penjelasan lengkap semua fitur di halaman utama
 """
 
 import streamlit as st
@@ -256,7 +257,7 @@ TRANSLATIONS = {
         'project_overview': '## 🎯 Project Overview',
         'project_description': '**Matrix Transformation Studio** is an interactive web application developed as a **Final Project for Linear Algebra Course**. This application is designed to **visualize matrix transformation concepts** to make them easier to understand through web-based visualization approach.',
         'contributions': '## 💪 Contributions',
-        'contributions_description': '**The entire development process of this project was done individually** by Yoseph Sihite. Contributions include concept design and application architecture, matrix transformation algorithm development, and implementation of linear algebra concepts into interactive visual systems. Additionally, web app development, including user interface design, application logic management, and functionality testing, was completed entirely individually due to the absence of other members in Group 2.',
+        'contributions_description': '**The entire development process of this project was done individually** by Yoseph Sihite. Contributions include concept design and application architecture, matrix transformation algorithm development, and implementation of linear algebra concepts into interactive visual systems. Additionally, web app development, including user interface design, application logic management, and functionality testing, was completed entirely individually due to absence of other members in Group 2.',
         
         # Language selector
         'select_language': '🌐 Select Language',
@@ -300,6 +301,12 @@ st.markdown("""
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         margin-bottom: 1rem;
         border: 1px solid #e2e8f0;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
     }
     
     .matrix-card {
@@ -457,6 +464,19 @@ st.markdown("""
         margin-bottom: 1rem;
         border: 1px solid #e2e8f0;
         text-align: center;
+    }
+    
+    /* Feature cards styling */
+    .feature-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .feature-subtitle {
+        text-align: center;
+        color: #64748b;
+        margin-bottom: 2rem;
+        font-size: 1.1rem;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -995,7 +1015,7 @@ class SafeMatrixTransformer:
             }
 
 def main_app():
-    """Main Matrix Transformation Application with Image Processing"""
+    """Main Matrix Transformation Application with 7 Features"""
     # Header
     st.markdown(f"""
     <div class="main-header">
@@ -1273,6 +1293,14 @@ def main_app():
         """, unsafe_allow_html=True)
         
         # Feature info
+        st.markdown("---")
+        st.markdown(f"""
+        <div class="feature-header">
+            <h3 style="margin: 0; color: #1e293b;">🌟 Fitur Lengkap Tersedia (7 Fitur)</h3>
+            <p class="feature-subtitle">Transformasi Matriks (5 Fitur) + Pemrosesan Gambar (2 Fitur)</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
         col1, col2, col3 = st.columns(3)
         
         with col1:
@@ -1299,7 +1327,7 @@ def main_app():
             </div>
             """, unsafe_allow_html=True)
         
-        col4, col5 = st.columns(2)
+        col4, col5, col6 = st.columns(3)
         
         with col4:
             st.markdown(f"""
@@ -1314,6 +1342,32 @@ def main_app():
             <div class="card">
                 <h4 style="margin: 0 0 0.5rem 0; color: #667eea;">{get_text('reflection')}</h4>
                 <p style="margin: 0; color: #64748b; font-size: 0.9rem;">{get_text('reflection_desc')}</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col6:
+            st.markdown(f"""
+            <div class="card">
+                <h4 style="margin: 0 0 0.5rem 0; color: #764ba2;">{get_text('blur')}</h4>
+                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">{get_text('blur_desc')}</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        col7, col8, col9 = st.columns([1, 1, 1])
+        
+        with col7:
+            st.markdown(f"""
+            <div class="card">
+                <h4 style="margin: 0 0 0.5rem 0; color: #667eea;">{get_text('sharpen')}</h4>
+                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">{get_text('sharpen_desc')}</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col8:
+            st.markdown(f"""
+            <div class="card">
+                <h4 style="margin: 0 0 0.5rem 0; color: #764ba2;">{get_text('background_removal')}</h4>
+                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">{get_text('background_removal_desc')}</p>
             </div>
             """, unsafe_allow_html=True)
 
