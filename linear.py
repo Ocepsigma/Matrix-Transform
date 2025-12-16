@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-🔄 Matrix Transformation Studio - Final Version Complete with Bilingual Support
+🔄 Matrix Transformation Studio - Final Version Complete with Bilingual Support & Image Processing
 Page 1: Main Application
 Page 2: Creator Profile - Yoseph Sihite
 ✅ Foto profil dengan zoom yang tepat dan posisi yang seimbang
@@ -9,11 +9,12 @@ Page 2: Creator Profile - Yoseph Sihite
 ✅ Dukungan 2 Bahasa: Indonesia & English
 ✅ Profil yang lebih ringkas (tanpa kontribusi utama, teknologi, dan prestasi akademik)
 ✅ Semua fitur lengkap dan stabil
+✅ Image Processing: Blur, Sharpen, Background Removal
 """
 
 import streamlit as st
 import numpy as np
-from PIL import Image, ImageDraw, ImageFile, ImageEnhance
+from PIL import Image, ImageDraw, ImageFile, ImageEnhance, ImageFilter
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import io
@@ -55,6 +56,7 @@ TRANSLATIONS = {
         
         # Controls
         'transformation_controls': '🎛️ Kontrol Transformasi',
+        'image_processing': '🎨 Pemrosesan Gambar',
         'upload_image': '📤 Unggah Gambar',
         'upload_help': 'Unggah gambar untuk menerapkan transformasi (Maks: 10MB, 50MP)',
         'file_too_large': '❌ File terlalu besar!',
@@ -67,6 +69,16 @@ TRANSLATIONS = {
         'rotation': '🔄 Rotasi',
         'shearing': '🔀 Geser',
         'reflection': '🔁 Refleksi',
+        
+        # Image Processing
+        'blur': '🌫 Blur',
+        'sharpen': '🔍 Tajamkan',
+        'background_removal': '🎨 Hapus Latar Belakang',
+        'blur_intensity': 'Intensitas Blur',
+        'sharpen_intensity': 'Intensitas Tajamkan',
+        'background_tolerance': 'Toleransi Latar Belakang',
+        'apply_processing': 'Terapkan Pemrosesan',
+        'reset_processing': 'Reset Pemrosesan',
         
         # Parameters
         'translation_params': 'Parameter Translasi',
@@ -97,7 +109,10 @@ TRANSLATIONS = {
         'original_label': 'ASLI',
         'transformed_image': '✨ Gambar Transformasi',
         'transformed_label': 'TRANSFORMASI',
+        'processed_image': '🎨 Gambar Diproses',
+        'processed_label': 'DIPROSES',
         'download_image': '💾 Unduh Gambar Transformasi',
+        'download_processed': '💾 Unduh Gambar Diproses',
         'transformation_matrix': '📊 Matriks Transformasi',
         'matrix_explanation': '📖 Penjelasan Komponen Matriks',
         'active_transformations': '🔧 Transformasi Aktif:',
@@ -109,6 +124,9 @@ TRANSLATIONS = {
         'rotation_desc': 'Putar objek dengan sudut apa pun dengan interpolasi yang halus',
         'shearing_desc': 'Terapkan transformasi skew untuk efek artistik',
         'reflection_desc': 'Cerminkan objek secara horizontal dan/atau vertikal',
+        'blur_desc': 'Menghaluskan gambar dengan efek blur',
+        'sharpen_desc': 'Meningkatkan ketajaman gambar',
+        'background_removal_desc': 'Menghapus latar belakang gambar',
         
         # Profile Page
         'creator_profile': '👨‍💻 Profil Pembuat',
@@ -160,6 +178,7 @@ TRANSLATIONS = {
         
         # Controls
         'transformation_controls': '🎛️ Transformation Controls',
+        'image_processing': '🎨 Image Processing',
         'upload_image': '📤 Upload Image',
         'upload_help': 'Upload an image to apply transformations (Max: 10MB, 50MP)',
         'file_too_large': '❌ File too large!',
@@ -172,6 +191,16 @@ TRANSLATIONS = {
         'rotation': '🔄 Rotation',
         'shearing': '🔀 Shearing',
         'reflection': '🔁 Reflection',
+        
+        # Image Processing
+        'blur': '🌫 Blur',
+        'sharpen': '🔍 Sharpen',
+        'background_removal': '🎨 Background Removal',
+        'blur_intensity': 'Blur Intensity',
+        'sharpen_intensity': 'Sharpen Intensity',
+        'background_tolerance': 'Background Tolerance',
+        'apply_processing': 'Apply Processing',
+        'reset_processing': 'Reset Processing',
         
         # Parameters
         'translation_params': 'Translation Parameters',
@@ -202,7 +231,10 @@ TRANSLATIONS = {
         'original_label': 'ORIGINAL',
         'transformed_image': '✨ Transformed Image',
         'transformed_label': 'TRANSFORMED',
+        'processed_image': '🎨 Processed Image',
+        'processed_label': 'PROCESSED',
         'download_image': '💾 Download Transformed Image',
+        'download_processed': '💾 Download Processed Image',
         'transformation_matrix': '📊 Transformation Matrix',
         'matrix_explanation': '📖 Matrix Components Explanation',
         'active_transformations': '🔧 Active Transformations:',
@@ -214,6 +246,9 @@ TRANSLATIONS = {
         'rotation_desc': 'Rotate objects by any angle with smooth interpolation',
         'shearing_desc': 'Apply skew transformations for artistic effects',
         'reflection_desc': 'Mirror objects horizontally and/or vertically',
+        'blur_desc': 'Blur the image with blur effect',
+        'sharpen_desc': 'Increase image sharpness',
+        'background_removal_desc': 'Remove background from image',
         
         # Profile Page
         'creator_profile': '👨‍💻 Creator Profile',
@@ -540,12 +575,77 @@ def process_profile_photo(image):
         # Jika proses gagal, return original image
         return image
 
+def apply_blur(image, intensity=1.0):
+    """Apply blur effect to image"""
+    try:
+        # Apply Gaussian blur with specified intensity
+        radius = int(intensity * 5)  # Scale intensity to radius
+        if radius < 1:
+            radius = 1
+        return image.filter(ImageFilter.GaussianBlur(radius=radius))
+    except Exception as e:
+        st.error(f"Error applying blur: {str(e)}")
+        return image
+
+def apply_sharpen(image, intensity=1.0):
+    """Apply sharpen effect to image"""
+    try:
+        # Apply sharpening with specified intensity
+        factor = 1.0 + (intensity * 0.5)  # Scale intensity to factor
+        return image.filter(ImageFilter.UnsharpMask(radius=2, percent=int(factor*150), threshold=3))
+    except Exception as e:
+        st.error(f"Error applying sharpen: {str(e)}")
+        return image
+
+def remove_background(image, tolerance=30):
+    """
+    Remove background from image using simple color-based segmentation
+    """
+    try:
+        # Convert to numpy array
+        img_array = np.array(image)
+        
+        # Create a mask for background removal
+        # Simple approach: remove pixels that are close to the edge colors
+        h, w = img_array.shape[:2]
+        
+        # Get edge colors (corners and edges)
+        edge_colors = []
+        edge_colors.append(img_array[0, 0])  # Top-left
+        edge_colors.append(img_array[0, w-1])  # Top-right
+        edge_colors.append(img_array[h-1, 0])  # Bottom-left
+        edge_colors.append(img_array[h-1, w-1])  # Bottom-right
+        
+        # Average edge color
+        avg_edge_color = np.mean(edge_colors, axis=0)
+        
+        # Create mask: pixels close to edge color are considered background
+        mask = np.zeros((h, w), dtype=bool)
+        
+        for i in range(h):
+            for j in range(w):
+                # Calculate distance from average edge color
+                color_diff = np.linalg.norm(img_array[i, j] - avg_edge_color)
+                if color_diff < tolerance:
+                    mask[i, j] = True
+        
+        # Apply mask to create transparent background
+        result = img_array.copy()
+        result[mask] = [255, 255, 255, 0]  # White with alpha=0 for background
+        
+        # Convert back to PIL Image
+        return Image.fromarray(result)
+    except Exception as e:
+        st.error(f"Error removing background: {str(e)}")
+        return image
+
 class SafeMatrixTransformer:
     """Matrix Transformer dengan proteksi DecompressionBombError"""
     
     def __init__(self):
         self.image = None
         self.transformed_image = None
+        self.processed_image = None
         self.original_shape = None
     
     def safe_load_image(self, image_source) -> bool:
@@ -920,7 +1020,7 @@ class SafeMatrixTransformer:
             }
 
 def main_app():
-    """Main Matrix Transformation Application"""
+    """Main Matrix Transformation Application with Image Processing"""
     # Header
     st.markdown(f"""
     <div class="main-header">
@@ -1063,8 +1163,23 @@ def main_app():
         matrix = transformer.create_transformation_matrix(params)
         transformed_image = transformer.safe_apply_transformation(matrix)
         
+        # Apply image processing
+        blur_intensity = st.session_state.get('blur_intensity', 0.0)
+        sharpen_intensity = st.session_state.get('sharpen_intensity', 0.0)
+        bg_tolerance = st.session_state.get('background_tolerance', 30)
+        apply_bg_removal = st.session_state.get('apply_bg_removal', False)
+        
+        if blur_intensity > 0:
+            transformed_image = apply_blur(transformed_image, blur_intensity)
+        
+        if sharpen_intensity > 0:
+            transformed_image = apply_sharpen(transformed_image, sharpen_intensity)
+        
+        if apply_bg_removal:
+            transformed_image = remove_background(transformed_image, bg_tolerance)
+        
         # Display results
-        col1, col2 = st.columns(2)
+        col1, col2, col3 = st.columns(3)
         
         with col1:
             st.subheader(get_text('original_image'))
@@ -1084,6 +1199,24 @@ def main_app():
                     label=get_text('download_image'),
                     data=img_buffer,
                     file_name="transformed_image.png",
+                    mime="image/png",
+                    use_container_width=True
+                )
+        
+        with col3:
+            st.subheader(get_text('processed_image'))
+            st.image(transformer.processed_image, use_container_width=True, caption=get_text('processed_label'))
+            
+            # Download button for processed image
+            if transformer.processed_image is not None:
+                img_buffer = io.BytesIO()
+                transformer.processed_image.save(img_buffer, format='PNG')
+                img_buffer.seek(0)
+                
+                st.download_button(
+                    label=get_text('download_processed'),
+                    data=img_buffer,
+                    file_name="processed_image.png",
                     mime="image/png",
                     use_container_width=True
                 )
