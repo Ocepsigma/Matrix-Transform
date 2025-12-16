@@ -1,18 +1,3 @@
-#!/usr/bin/env python3
-"""
-🔄 Matrix Transformation Studio - Final Version Complete with Image Processing
-Page 1: Main Application with 7 Features
-Page 2: Creator Profile - Yoseph Sihite
-✅ Foto profil dengan zoom yang tepat dan posisi yang seimbang
-✅ Development Team tanpa HTML
-✅ Fungsi load foto dari GitHub yang diperbaiki
-✅ Dukungan 2 Bahasa: Indonesia & English
-✅ Profil yang lebih ringkas (tanpa kontribusi utama, teknologi, dan prestasi akademik)
-✅ Semua fitur lengkap dan stabil
-✅ 7 Fitur Lengkap: 5 Transformasi Matriks + 2 Pemrosesan Gambar
-✅ Penjelasan lengkap semua fitur di halaman utama
-"""
-
 import streamlit as st
 import numpy as np
 from PIL import Image, ImageDraw, ImageFile, ImageEnhance, ImageFilter
@@ -1476,3 +1461,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
