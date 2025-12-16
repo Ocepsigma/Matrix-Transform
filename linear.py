@@ -56,7 +56,6 @@ TRANSLATIONS = {
         'reflection': '🔁 Refleksi',
         'blur': '🌫 Blur',
         'sharpen': '🔍 Tajamkan',
-        'background_removal': '🎨 Hapus Latar Belakang',
         
         # Parameters
         'translation_params': 'Parameter Translasi',
@@ -75,7 +74,6 @@ TRANSLATIONS = {
         'vertical_reflection': 'Refleksi Vertikal',
         'blur_intensity': 'Intensitas Blur',
         'sharpen_intensity': 'Intensitas Tajamkan',
-        'background_tolerance': 'Toleransi Latar Belakang',
         
         # Current values
         'current': 'Saat ini:',
@@ -104,7 +102,6 @@ TRANSLATIONS = {
         'reflection_desc': 'Cerminkan objek secara horizontal dan/atau vertikal',
         'blur_desc': 'Menghaluskan gambar dengan efek blur',
         'sharpen_desc': 'Meningkatkan ketajaman gambar',
-        'background_removal_desc': 'Menghapus latar belakang gambar',
         
         # Profile Page
         'creator_profile': '👨‍💻 Profil Pembuat',
@@ -170,7 +167,6 @@ TRANSLATIONS = {
         'reflection': '🔁 Reflection',
         'blur': '🌫 Blur',
         'sharpen': '🔍 Sharpen',
-        'background_removal': '🎨 Background Removal',
         
         # Parameters
         'translation_params': 'Translation Parameters',
@@ -189,7 +185,6 @@ TRANSLATIONS = {
         'vertical_reflection': 'Vertical Reflection',
         'blur_intensity': 'Blur Intensity',
         'sharpen_intensity': 'Sharpen Intensity',
-        'background_tolerance': 'Background Tolerance',
         
         # Current values
         'current': 'Current:',
@@ -218,7 +213,6 @@ TRANSLATIONS = {
         'reflection_desc': 'Mirror objects horizontally and/or vertically',
         'blur_desc': 'Blur the image with blur effect',
         'sharpen_desc': 'Increase image sharpness',
-        'background_removal_desc': 'Remove background from image',
         
         # Profile Page
         'creator_profile': '👨‍💻 Creator Profile',
@@ -1256,8 +1250,6 @@ def main_app():
             active.append(get_text('blur'))
         if sharpen_intensity > 0:
             active.append(get_text('sharpen'))
-        if apply_bg_removal:
-            active.append(get_text('background_removal'))
         
         if active:
             st.info(f"{get_text('active_transformations')} {', '.join(active)}")
@@ -1461,4 +1453,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
